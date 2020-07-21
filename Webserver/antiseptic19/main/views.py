@@ -5,7 +5,7 @@ from django.contrib import messages
 # Create your views here.
 def login(request):
     if request.method == "GET" :
-        return render(request, 'main/login.html')
+        return render(request, 'main/main.html')
 
     elif request.method == "POST":
         login_ID = request.POST.get('email', None)
@@ -31,7 +31,7 @@ def login(request):
             except User.DoesNotExist:
                 messages.add_message(request, messages.INFO, '가입하지 않은 아이디입니다.') # 첫번째, 초기지원
 
-        return render(request, 'main/login.html')
+        return render(request, 'main/main.html')
 
 def signup(request):   #회원가입 페이지를 보여주기 위한 함수
     if request.method == "GET":
