@@ -1,39 +1,100 @@
 {%extends 'main/top.html' %}
 {% block content %}
+<style>
+    .login{
+        width: 800px;
+    }
+    .signup_field h4{
+        color: gray;
+        line-height: 5px;
+        font-size: 1.4rem;
+    }
+    .signup_field .field{
+        padding: 5px;
+        margin-top: 20px;
+        position: relative;
+    }
+    .signup_field input{
+        width: 70%;
+        border: none;
+        outline: none;
+        border-bottom: 1px solid #999;
+        color: black;
+        font-size: 1rem;
+    }
 
-<article class="container">
-    <h1>회원가입</h1>
+    .signup_field button{
+        display: block;
+        float:left;
+        margin-right:20px;
+
+        width: 45%;
+        outline: none;
+        background-color: #4277b2;
+        border: 1px solid #4277b2;
+        border-radius: 10px;
+        color: white;
+        font-size: 1rem;
+        cursor: pointer;
+
+    }
+    .signup_field .labelid{
+        color: gray;
+    }
+    .signup_field .label{
+        position: absolute;
+        pinter-events: none;
+        left:100px;
+        top: 5px;
+        transition: 0.2s ease all;
+        color: #A9CCE3;
+    }
+    .signup_field input:focus ~ .label,
+    .signup_field input:not(:focus):valid ~ .label{
+        top: -10px;
+        font-size: .8rem;
+        opacity: 1;
+    }
+</style>
+<div class="signup_field">
+    <h4>회원가입</h4>
     <form method="POST"  action ="{%url 'signup'%}">
         {% csrf_token %}
-        ID :
-        <input name="email" type = "text">
-        <br>
-        Password :
-        <td width="*">
-            <font size="2em">
-                <input type="password" class="form-control" id="password" name="password"
-                    style="width:400px">(영문 대소문자/숫자/특수문자 중 2가지 이상 조합, 10자~16자)</font>
-        </td>
-        <br>
+        <div class="field">
+            <label for= "email" class="labelid">&nbsp&nbsp Email &nbsp&nbsp&nbsp&nbsp</label>
+            <input name="email" id="email" type = "email" required >
+            <span class="label">abc@gmail.com</span>
+        </div>
 
-        <tr>
-            <div class="form-group">
-                <td style="color:black; font-size:1em; padding:20px" align="center">비밀번호 확인</td>
-                <td width="*">
-                    <input type="password" class="form-control" id="re_password" name="re_password"
-                        style="width:400px">
-                </td>
+        <div class="field">
+            <div class = "form-group">
+                <label for= "password" class="labelid">Password&nbsp&nbsp </label>
+                <input name = "password" type ="form-control" id="password" required>
+                <span class="label">(영문 대소문자/숫자/특수문자 중 2가지 이상 조합, 10자~16자)</span>
             </div>
-        </tr>
-        <br>
 
-        name :
-        <input name = "name" type ="text">
+        </div>
 
-        <br>
+        <div class="field">
+            <div class = "form-group">
+                <label for= "re_password" class="labelid">비밀번호 확인&nbsp&nbsp </label>
+                <input name = "password" type ="form-control" id="re_password" required>
+                <span class="label">(영문 대소문자/숫자/특수문자 중 2가지 이상 조합, 10자~16자)</span>
+            </div>
+        </div>
 
-        사용자사진 :
-        <input name = "userimage" type ="text">
+        <div class="field">
+            <label for= "name" class="labelid">username&nbsp&nbsp </label>
+            <input name = "name" type ="text" id="name" required>
+            <span class="label">김혜원</span>
+        </div>
+
+        <div class="field">
+            <label for= "userImage" class="labelid">userImage&nbsp&nbsp </label>
+
+            <input name = "userImage" type ="Image" id="userImage" required>
+
+        </div>
 
         <br>
 
@@ -52,9 +113,10 @@
         <br>
         <div align="center">
             <button type="submit" class ="btn btn-dark" > <p>회원가입</p></button>
+
             <button type="button" class ="btn btn-light"  onclick="location.href='/'"><p >이전으로</p></button>
         </div>
     </form>
-</article>
+</div>
 
 {% endblock %}

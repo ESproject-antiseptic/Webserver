@@ -1,17 +1,17 @@
 {% extends 'main/top.html' %}
 {% block content %}
 <style>
-    .signup_field h4{
-        color: #424949;
+    .login_field h4{
+        color: gray;
         line-height: 5px;
         font-size: 1.4rem;
     }
-    .signup_field .field{
+    .login_field .field{
         padding: 5px;
         margin-top: 20px;
         position: relative;
     }
-    .signup_field input{
+    .login_field input{
         width: 70%;
         border: none;
         outline: none;
@@ -20,30 +20,30 @@
         font-size: 1rem;
     }
 
-    .signup_field button{
+    .login_field button{
         display: block;
         width: 100%;
         outline: none;
         background-color: #4277b2;
-        border: 1px solid #29487d;
+        border: 1px solid #4277b2;
+        border-radius: 10px;
         color: white;
         font-size: 1rem;
         cursor: pointer;
-        padding: 10px;
     }
-    .signup_field .labelid{
-        color: #424949;
+    .login_field .labelid{
+        color: gray;
     }
-    .signup_field .label{
+    .login_field .label{
         position: absolute;
         pinter-events: none;
-        left:80px;
+        left:100px;
         top: 5px;
         transition: 0.2s ease all;
         color: #A9CCE3;
     }
-    .signup_field input:focus ~ .label,
-    .signup_field input:not(:focus):valid ~ .label{
+    .login_field input:focus ~ .label,
+    .login_field input:not(:focus):valid ~ .label{
         top: -10px;
         font-size: .8rem;
         opacity: 1;
@@ -52,18 +52,18 @@
 
 </style>
 
-<div class="signup_field">
+<div class="login_field">
     <h4>로그인</h4>
     <form method="POST"  action ="{%url 'home'%}" >
         {% csrf_token %}
         <div class="field">
-            <label for= "email" class="labelid">&nbsp&nbsp&nbsp&nbsp ID &nbsp&nbsp&nbsp&nbsp</label>
+            <label for= "email" class="labelid">&nbsp&nbsp&nbsp&nbsp ID &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
             <input name="email" id="email" type = "email" required >
             <span class="label">abc@gmail.com</span>
         </div>
 
         <div class="field">
-            <label for= "password" class="labelid">Password </label>
+            <label for= "password" class="labelid">Password&nbsp&nbsp </label>
             <input name = "password" type ="password" id="password" required>
             <span class="label">8자리이상</span>
         </div>
