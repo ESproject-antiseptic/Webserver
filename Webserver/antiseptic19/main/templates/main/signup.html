@@ -1,0 +1,60 @@
+{%extends 'main/top.html' %}
+{% block content %}
+
+<article class="container">
+    <h1>회원가입</h1>
+    <form method="POST"  action ="{%url 'signup'%}">
+        {% csrf_token %}
+        ID :
+        <input name="email" type = "text">
+        <br>
+        Password :
+        <td width="*">
+            <font size="2em">
+                <input type="password" class="form-control" id="password" name="password"
+                    style="width:400px">(영문 대소문자/숫자/특수문자 중 2가지 이상 조합, 10자~16자)</font>
+        </td>
+        <br>
+
+        <tr>
+            <div class="form-group">
+                <td style="color:black; font-size:1em; padding:20px" align="center">비밀번호 확인</td>
+                <td width="*">
+                    <input type="password" class="form-control" id="re_password" name="re_password"
+                        style="width:400px">
+                </td>
+            </div>
+        </tr>
+        <br>
+
+        name :
+        <input name = "name" type ="text">
+
+        <br>
+
+        사용자사진 :
+        <input name = "userimage" type ="text">
+
+        <br>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="row" style="text-align:center">
+                <div class="col-sm-6" style="text-align:center">
+                    <div class="alert alert-danger" style="text-align:center">
+                    <strong>{{ message.tags }}!</strong> {{ message.message }}
+                    </div>
+                </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+        <br>
+        <br>
+        <div align="center">
+            <button type="submit" class ="btn btn-dark" > <p>회원가입</p></button>
+            <button type="button" class ="btn btn-light"  onclick="location.href='/'"><p >이전으로</p></button>
+        </div>
+    </form>
+</article>
+
+{% endblock %}
