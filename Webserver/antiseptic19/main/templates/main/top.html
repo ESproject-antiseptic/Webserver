@@ -1,12 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>자동감독APP</title>
+    <title>자동감독APP Main 페이지 (로그인 창 + 회원가입 버튼)</title>
+    <style>
+        html{
+            box-sizing: border-box;
+            font-size: 15px;
+        }
+
+        *,*:before: *:after{
+            box-sizing: inherit;
+        }
+
+        body,h1,h2,h3{
+            margin: 0;
+            padding: 0;
+            font-weight: normal;
+        }
+
+        body {
+            background-color: #3c5b9a;
+            padding: 4erm;
+            font-family: tahoma;
+        }
+        .main{
+            width:100%;
+            background-color: #e9eaef;
+            box-shadow: 0 0 20px #143477;
+        }
+        .top{
+            background-color:#3c5b9a
+        }
+        .header{
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #topMenu ul li{
+            list-style: none;
+            float: left;
+            line-height: 60px;
+            vertical-align: middle;
+            text-align:center;
+        }
+        #topMenu .nav-item{
+            color: white;
+            width: 50px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        #topIcon ul li{
+            list-style: none;
+            float: right;
+
+            line-height: 60px;
+            padding-right : 20px;
+            vertical-align: middle;
+            text-align:center;
+        }
+        #topIcon .nav-item{
+            color: white;
+            width: 40px;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        h2{
+            color: white;
+            text-align: center;
+            font-size; 2rem;
+            padding: 0px 0 10px ;
+        }
+        h3{
+            color: white;
+            text-align: center;
+            font-size; 1rem;
+            padding-bottom: 100px;
+        }
+        .login{
+            width: 350px;
+            margin: auto;
+            background-color : white;
+            padding: 30px;
+            position: relative;
+            top: -71px
+
+        }
+
+
+
+    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+
+
 </head>
 <body>
-<h1>자동감시APP</h1>
-{% block content %}
-{% endblock %}
+    <div class ="main">
+        <div class ="top">
+            <div class = header">
+                <div class = "category" >
+                    <nav id ="topMenu">
+                        <ul class="nav nav-tabs">
+                            <li class = "nav-item">
+                                <a class = "nav-link" href ="/"><span style="color:white; font-size:1.25em;">Home</span></a>
+                            </li>
+                            <li class = "nav-item">
+                                <a class = "nav-link" href ="/"><span style="color:white; font-size:1.25em;">Func</span></a>
+                            </li>
+                            <li class = "nav-item">
+                                <a class = "nav-link" href ="/"><span style="color:white; font-size:1.25em;">Story</span></a>
+                            </li>
+                            <li class = "nav-item">
+                                <a class = "nav-link" href ="/"><span style="color:white; font-size:1.25em;">Notice</span></a>
+                            </li>
+                        </ul>
+                    </nav>
+
+                    <nav id ="topIcon">
+                        <ul class ="nav nav-tabs">
+                            <li class = "nav-item">
+                                <a class ="fa fa-user-o fa-2x"  href ="/" style ="color: white"></a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <hr color="white" width="100%">
+            <h2>Welcome to AutoWatching APP</h2>
+            <h3>This is a app that ~~~</h3>
+        </div>
+
+        <div class ="login">
+
+            {% block content %}
+
+            {% endblock %}
+        </div>
+
+    </div>
 </body>
 </html>
