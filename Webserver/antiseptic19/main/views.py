@@ -45,7 +45,7 @@ def signup(request):   #회원가입 페이지를 보여주기 위한 함수
         # userimage = request
 
         if not (email and name and password and re_password) :
-            messages.add_message(request, messages.INFO, '모든 값을 입력해야 합니다.') # 첫번째, 초기지원
+            messages.add_message(request, messages.INFO, '모든 값을 입력해야 합니다.!') # 첫번째, 초기지원
             return render(request, 'main/signup.html') #register를 요청받으면 register.html 로 응답.
 
         if password != re_password :
