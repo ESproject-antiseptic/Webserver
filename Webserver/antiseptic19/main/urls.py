@@ -1,15 +1,6 @@
 from django.urls import path
 from . import views
-#Router 부분 
-from rest_framework import routers
-from rest_framework.response import Response
-from rest_framework.views import APIView
-
-
-
-
-
-
+#Router 부분
 
 
 urlpatterns = [

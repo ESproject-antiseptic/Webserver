@@ -3,8 +3,7 @@ from .models import *
 from django.contrib.auth.hashers import make_password,check_password
 from django.contrib import messages
 #JSON 요청을 위한 Parser 추가
-from .serializers import PostSerializer
-from django.core import serializers
+
 from django.http import HttpResponse
 import simplejson
 #CSRF TOKEN 무효
