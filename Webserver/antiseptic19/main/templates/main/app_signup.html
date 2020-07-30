@@ -1,0 +1,116 @@
+{%extends 'main/top.html' %}
+{% block content %}
+<style>
+    .login{
+        width: 800px;
+    }
+    .signup_field h4{
+        color: gray;
+        line-height: 5px;
+        font-size: 1.4rem;
+    }
+    .signup_field .field{
+        padding: 5px;
+        margin-top: 20px;
+        position: relative;
+    }
+    .signup_field input{
+        width: 70%;
+        border: none;
+        outline: none;
+        border-bottom: 1px solid #999;
+        color: black;
+        font-size: 1rem;
+    }
+
+    .signup_field button{
+        display: block;
+        float:left;
+        margin-right:20px;
+
+        width: 45%;
+        outline: none;
+        background-color: #4277b2;
+        border: 1px solid #4277b2;
+        border-radius: 10px;
+        color: white;
+        font-size: 1rem;
+        cursor: pointer;
+
+    }
+    .signup_field .labelid{
+        color: gray;
+    }
+    .signup_field .label{
+        position: absolute;
+        pinter-events: none;
+        left:100px;
+        top: 5px;
+        transition: 0.2s ease all;
+        color: #A9CCE3;
+    }
+    .signup_field input:focus ~ .label,
+    .signup_field input:not(:focus):valid ~ .label{
+        top: -10px;
+        font-size: .8rem;
+        opacity: 1;
+    }
+</style>
+<div class="signup_field">
+    <h4>회원가입</h4>
+    <form method="POST"  action ="{%url 'app_signup'%}">
+        {% csrf_token %}
+        <div class="field">
+            <label for= "email" class="labelid">&nbsp&nbsp Email &nbsp&nbsp&nbsp&nbsp</label>
+            <input name="email" id="email" type = "email" required >
+            <span class="label">abc@gmail.com</span>
+        </div>
+
+        <div class="field">
+            <div class = "form-group">
+                <label for= "password" class="labelid">Password&nbsp&nbsp </label>
+                <input name = "password" type ="form-control" id="password" required>
+                <span class="label">(영문 대소문자/숫자/특수문자 중 2가지 이상 조합, 10자~16자)</span>
+            </div>
+
+        </div>
+
+
+
+        <div class="field">
+            <label for= "name" class="labelid">username&nbsp&nbsp </label>
+            <input name = "name" type ="text" id="name" required>
+            <span class="label">김혜원</span>
+        </div>
+
+        <div class="field">
+            <label for= "userImage" class="labelid">userImage&nbsp&nbsp </label>
+
+            <input name = "userImage" type ="Image" id="userImage" required>
+
+        </div>
+
+        <br>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="row" style="text-align:center">
+                <div class="col-sm-6" style="text-align:center">
+                    <div class="alert alert-danger" style="text-align:center">
+                    <strong>{{ message.tags }}!</strong> {{ message.message }}
+                    </div>
+                </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+        <br>
+        <br>
+        <div align="center">
+            <button type="submit" class ="btn btn-dark" > <p>회원가입</p></button>
+
+            <button type="button" class ="btn btn-light"  onclick="location.href='/'"><p >이전으로</p></button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
