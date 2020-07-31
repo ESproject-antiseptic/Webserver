@@ -58,7 +58,7 @@
 </style>
 <div class="signup_field">
     <h4>회원가입</h4>
-    <form method="POST"  action ="{%url 'signup'%}">
+    <form method="POST"  action ="{%url 'signup'%}" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="field">
             <label for= "email" class="labelid">&nbsp&nbsp Email &nbsp&nbsp&nbsp&nbsp</label>
@@ -90,9 +90,9 @@
         </div>
 
         <div class="field">
-            <label for= "userImage" class="labelid">userImage&nbsp&nbsp </label>
-
-            <input name = "userImage" type ="Image" id="userImage" required>
+            <label for= "userimage" class="labelid">userImage&nbsp&nbsp </label>
+            <input type = "file" class="form-control" id="userimage" name="userimage"
+                                        style="widows: 200px" accept=".png, .jpeg, .jpg">
 
         </div>
 

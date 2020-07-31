@@ -42,35 +42,44 @@ def login(request):
 
         return render(request, 'main/main.html')
 
+from django.core.files.storage import FileSystemStorage
+from django.views.decorators.csrf import csrf_exempt
+@csrf_exempt
 def signup(request):   #회원가입 페이지를 보여주기 위한 함수
+    res_data = {}
     if request.method == "GET":
         return render(request, 'main/signup.html')
-
     elif request.method == "POST":
 
         email = request.POST.get('email', None)
         password = request.POST.get('password',None)
         re_password = request.POST.get('re_password',None)
         name = request.POST.get('name', None)   #딕셔너리형태
-        # userimage = request
+        userimage = request.FILES['userimage']
+        fs = FileSystemStorage()
 
+        res_data['image_url'] = fs.url(userimage.name)
         if not (email and name and password and re_password) :
             messages.add_message(request, messages.INFO, '모든 값을 입력해야 합니다.!') # 첫번째, 초기지원
-            return render(request, 'main/signup.html') #register를 요청받으면 register.html 로 응답.
+            return render(request, 'main/signup.html',res_data) #register를 요청받으면 register.html 로 응답.
 
         if password != re_password :
             #return HttpResponse('비밀번호가 다릅니다.')
             messages.add_message(request, messages.INFO, '비밀번호가 다릅니다.') # 첫번째, 초기지원
-            return render(request, 'main/signup.html') #register를 요청받으면 register.html 로 응답.
+            return render(request, 'main/signup.html',res_data) #register를 요청받으면 register.html 로 응답.
 
         else :
             user = User(email = email, password=make_password(password),name=name) #userimage도 받아야함
             user.save()
             messages.add_message(request, messages.INFO, '회원가입이 성공하였습니다')
+            # return redirect("/")
 
-            return redirect('/')
+            return render(request, 'main/success.html', res_data) #register를 요청받으면 register.html 로 응답.
 
-            #return render(request, 'home.html', res_data) #register를 요청받으면 register.html 로 응답.
+def home(request):
+    return render(request, 'main/home.html')
+
+
 #임시방편으로 CSRF 무효화 시킴.
 @method_decorator(csrf_exempt,name='dispatch')
 def app_signup(request):
