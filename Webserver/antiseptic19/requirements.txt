@@ -1,0 +1,4 @@
+Django==2.2.14
+pytz==2020.1
+simplejson==3.17.2
+sqlparse==0.3.1
