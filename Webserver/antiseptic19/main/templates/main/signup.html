@@ -1,8 +1,9 @@
 {%extends 'main/top.html' %}
+
 {% block content %}
 <style>
     .login{
-        width: 800px;
+        width: 80%;
     }
     .signup_field h4{
         color: gray;
@@ -27,7 +28,6 @@
         display: block;
         float:left;
         margin-right:20px;
-
         width: 45%;
         outline: none;
         background-color: #4277b2;
@@ -55,21 +55,54 @@
         font-size: .8rem;
         opacity: 1;
     }
+
 </style>
+
 <div class="signup_field">
     <h4>회원가입</h4>
+
     <form method="POST"  action ="{%url 'signup'%}" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="field">
             <label for= "email" class="labelid">&nbsp&nbsp Email &nbsp&nbsp&nbsp&nbsp</label>
-            <input name="email" id="email" type = "email" required >
+            <input class ="email" name="email" id="email" check_result = "fail" type = "email"  >
             <span class="label">abc@gmail.com</span>
         </div>
+        <button type="button" class ="id_check" id ="id_check" onclick ="id_check_func()">email 확인</button>
+        <br>
+        <script src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script type="text/javascript">
+            function id_check_func(){
+                id_overlap_input =document.querySelector('input[name = "email"]');
+                if ( id_overlap_input.value == '') {
+                    alert('이메일을 입력해주세요.');
+                    return;
+                }
+                $.ajax({
+                    url: '{%url 'signup'%}',
+                    data: { 'email' : id_overlap_input.value},
+                    success: function (data){
+                        console.log(data['overlap']);
+                        if (data['overlap'] =="fail"){
+                            alert("이미 존재하는 이메일입니다.");
+                            id_overlap_input.focus();
+                            return;
+                        }else{
+                            alert("사용가능한 이메일입니다.");
+                            $('.email').attr("check_result", "success");
+                            return;
+                        }
+                    }
+                })
+            }
+
+        </script>
+        <br>
 
         <div class="field">
             <div class = "form-group">
                 <label for= "password" class="labelid">Password&nbsp&nbsp </label>
-                <input name = "password" type ="form-control" id="password" required>
+                <input name = "password" type ="password" id="password" >
                 <span class="label">(영문 대소문자/숫자/특수문자 중 2가지 이상 조합, 10자~16자)</span>
             </div>
 
@@ -78,14 +111,14 @@
         <div class="field">
             <div class = "form-group">
                 <label for= "re_password" class="labelid">비밀번호 확인&nbsp&nbsp </label>
-                <input name = "re_password" type ="form-control" id="re_password" required>
+                <input name = "re_password" type ="password" id="re_password" >
                 <span class="label">(영문 대소문자/숫자/특수문자 중 2가지 이상 조합, 10자~16자)</span>
             </div>
         </div>
 
         <div class="field">
             <label for= "name" class="labelid">username&nbsp&nbsp </label>
-            <input name = "name" type ="text" id="name" required>
+            <input name = "name" type ="text" id="name" >
             <span class="label">김혜원</span>
         </div>
 
@@ -95,7 +128,22 @@
                                         style="widows: 200px" accept=".png, .jpeg, .jpg">
 
         </div>
-
+        <br>
+        <br>
+        <div align="center">
+            <button type="submit" class ="signup" id="signup" > <p>회원가입</p></button>
+            <button type="button" class ="btn btn-light"  onclick="location.href='/'"><p >이전으로</p></button>
+            <script>
+                $('.signup').click(function(){
+                    if ($('.email').attr("check_result") == "fail"){
+                        alert("아이디 중복체크를 확인하세요.");
+                        $('.username_input').focus();
+                        return false;
+                    }
+                });
+            </script>
+        </div>
+        <br>
         <br>
 
         {% if messages %}
@@ -109,13 +157,6 @@
                 </div>
             {% endfor %}
         {% endif %}
-        <br>
-        <br>
-        <div align="center">
-            <button type="submit" class ="btn btn-dark" > <p>회원가입</p></button>
-
-            <button type="button" class ="btn btn-light"  onclick="location.href='/'"><p >이전으로</p></button>
-        </div>
     </form>
 </div>
 

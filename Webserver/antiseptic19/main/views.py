@@ -4,7 +4,7 @@ from django.contrib.auth.hashers import make_password,check_password
 from django.contrib import messages
 #JSON 요청을 위한 Parser 추가
 
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 import simplejson
 #CSRF TOKEN 무효
 from django.views.decorators.csrf import csrf_exempt
@@ -47,10 +47,26 @@ from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 def signup(request):   #회원가입 페이지를 보여주기 위한 함수
     res_data = {}
+    info = {}
     if request.method == "GET":
-        return render(request, 'main/signup.html')
-    elif request.method == "POST":
+        email = request.GET.get('email')
+        if email:
+            try:  # 아이디가 존재할 경우
+                myuser = User.objects.get(email=email)
+                request.session['idcheck'] = False
+                overlap = "fail"
+                info['overlap'] = overlap
+            # 아이디가 존재하지 않을 경우
+            except User.DoesNotExist:
+                request.session['idcheck'] = True
+                info['idcheck'] = email
+                overlap = "pass"
+                info['overlap'] = overlap
+            return JsonResponse(info)
+        else:
+            return render(request, 'main/signup.html')
 
+    elif request.method == "POST":
         email = request.POST.get('email', None)
         password = request.POST.get('password',None)
         re_password = request.POST.get('re_password',None)
@@ -74,7 +90,9 @@ def signup(request):   #회원가입 페이지를 보여주기 위한 함수
             messages.add_message(request, messages.INFO, '회원가입이 성공하였습니다')
             # return redirect("/")
 
-            return render(request, 'main/success.html', res_data) #register를 요청받으면 register.html 로 응답.
+            return render(request, 'main/success.html', res_data) #register를 요청받으면 register.
+
+
 
 def home(request):
     return render(request, 'main/home.html')
