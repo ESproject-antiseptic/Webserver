@@ -29,11 +29,12 @@ def login(request):
                 #db에서 꺼내는 명령. Post로 받아온 username으로 , db의 username을 꺼내온다.
                 if check_password(login_password, myuser.password):
                     request.session['user'] = myuser.email
+                    request.session['name'] = myuser.name
                     #세션도 딕셔너리 변수 사용과 똑같이 사용하면 된다.
                     #세션 user라는 key에 방금 로그인한 id를 저장한것.
                     messages.add_message(request, messages.INFO, '로그인이 성공하였습니다')
 
-                    return render(request, 'main/home.html')
+                    return redirect("/home")
                 else:
                     messages.add_message(request, messages.INFO, '비밀번호가 틀렸습니다.') # 첫번째, 초기지원
             #아이디가 존재하지 않을 경우
@@ -75,7 +76,7 @@ def signup(request):   #회원가입 페이지를 보여주기 위한 함수
         fs = FileSystemStorage()
 
         res_data['image_url'] = fs.url(userimage.name)
-        if not (email and name and password and re_password) :
+        if not (email and name and password and re_password and userimage) :
             messages.add_message(request, messages.INFO, '모든 값을 입력해야 합니다.!') # 첫번째, 초기지원
             return render(request, 'main/signup.html',res_data) #register를 요청받으면 register.html 로 응답.
 
@@ -85,7 +86,7 @@ def signup(request):   #회원가입 페이지를 보여주기 위한 함수
             return render(request, 'main/signup.html',res_data) #register를 요청받으면 register.html 로 응답.
 
         else :
-            user = User(email = email, password=make_password(password),name=name) #userimage도 받아야함
+            user = User(email = email, password=make_password(password),name=name, userimage=userimage) #userimage도 받아야함
             user.save()
             messages.add_message(request, messages.INFO, '회원가입이 성공하였습니다')
             # return redirect("/")
@@ -96,6 +97,27 @@ def signup(request):   #회원가입 페이지를 보여주기 위한 함수
 
 def home(request):
     return render(request, 'main/home.html')
+
+def logout(request):
+    if request.session.get('user'):
+        del (request.session['user'])
+        del (request.session['name'])
+    return redirect('/')
+
+def mypage(request):
+    list={}
+    user_email=request.session.get('user')
+    user_info = User.objects.get(email=user_email)
+    list['user']=user_info
+    return render(request,"main/mypage.html", list)
+
+def dropout(request):
+    del (request.session['user'])
+    del (request.session['name'])
+
+    return redirect('/')
+
+
 
 
 #임시방편으로 CSRF 무효화 시킴.

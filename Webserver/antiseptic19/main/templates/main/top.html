@@ -22,39 +22,42 @@
 
         body {
             background-color: #3c5b9a;
-            padding: 4erm;
+            padding: 5erm;
             font-family: tahoma;
         }
         .main{
             width:100%;
             background-color: #e9eaef;
-            box-shadow: 0 0 20px #143477;
+            box-shadow: 20px 0 20px #143477;
         }
         .top{
-            background-color:#3c5b9a
+            background-color:#3c5b9a;
         }
         .header{
             display: flex;
-            justify-content: space-between;
         }
-
         #topMenu ul li{
             list-style: none;
             float: left;
             line-height: 60px;
-            vertical-align: middle;
-            text-align:center;
+            padding: 0 0 0 -30px;
+
         }
         #topMenu .nav-item{
             color: white;
-            width: 50px;
-            font-size: 12px;
+            width: 60px;
+            text-align:left;
+            font-size: 14px;
             font-weight: bold;
+
+        }
+
+        #topMenu a{
+            text-decoration:none;
         }
         #topIcon ul li{
             list-style: none;
             float: right;
-
             line-height: 60px;
             padding-right : 20px;
             vertical-align: middle;
@@ -62,11 +65,10 @@
         }
         #topIcon .nav-item{
             color: white;
-            width: 40px;
-            font-size: 15px;
+            width: 50px;
+            font-size: 14px;
             font-weight: bold;
         }
-
         h2{
             color: white;
             text-align: center;
@@ -85,22 +87,61 @@
             background-color : white;
             padding: 30px;
             position: relative;
-            top: -150px
-
+            top: -180px
         }
 
+        .sidenav {
+          height: 40%;
+          width: 0;
+          float: right;
+          position: fixed;
+          z-index: 1;
+          top: 14px;
+          left: 0;
+          background-color: #CED8F6;
+          background-color: rgba( 255, 255, 255, 0.9 );
+          overflow-x: hidden;
+          transition: 0.5s;
+          padding-top: 60px;
+        }
 
+        .sidenav a {
+          padding: 8px 8px 8px 32px;
+          text-decoration: none;
+          font-size: 20px;
+          color: #818181;
+          display: block;
+          transition: 0.3s;
+        }
 
+        .sidenav a:hover {
+          color: #3c5b9a;
+        }
+
+        .sidenav .closebtn {
+          position: absolute;
+          top: 0;
+          right: 25px;
+          font-size: 36px;
+          margin-left: 50px;
+        }
+
+        @media screen and (max-height: 450px) {
+          .sidenav {padding-top: 30px;}
+          .sidenav a {font-size: 15px;}
+        }
+        .logo{
+            width:50%;
+            text-align: center;
+            margin-bottom : -30px;
+        }
     </style>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
-
-
 
 </head>
 <body>
     <div class ="main">
-        <div class ="top">
+        <center class ="top">
             <div class = header">
                 <div class = "category" >
                     <nav id ="topMenu">
@@ -119,29 +160,50 @@
                             </li>
                         </ul>
                     </nav>
+                    <nav id="topIcon">
+                        <ul class ="nav sidebar-nav" >
+                            {%if request.session.user %}
+                            <!--로그인상태면-->
+                            <li class = "sidebar-brand ">
+                                <span class ="fa fa-user fa-2x"  onclick="openNav()" style ="color: white; font-size:28px">{{request.session.name}}</span>
+                            </li>
+                            <div id="mySidenav" class="sidenav">
+                                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                                {{request.session.name}}님 안녕하세요
+                                <a href="/home/mypage">MYPAGE</a>
+                                <a href="/logout">LOGOUT</a>
+                                <a href="#">MYROOM</a>
+                            </div>
 
-                    <nav id ="topIcon">
-                        <ul class ="nav nav-tabs">
+                            <script>
+                            function openNav() {
+                              document.getElementById("mySidenav").style.width = "250px";
+                            }
+
+                            function closeNav() {
+                              document.getElementById("mySidenav").style.width = "0";
+                            }
+                            </script>
+                            {%else%}
                             <li class = "nav-item">
                                 <a class ="fa fa-user-o fa-2x"  href ="/" style ="color: white"></a>
                             </li>
+                            {%endif%}
                         </ul>
                     </nav>
                 </div>
             </div>
-
+            <div class="logo">
+                <a href="/"><img src="/static/img/자동감시로고.png" width="97px" height="94px" alt="logo" ></a>
+            </div>
             <hr color="white" width="100%">
             <h2>Welcome to AutoWatching APP</h2>
             <h3>This is a app that ~~~</h3>
-        </div>
-
+        </center>
         <div class ="login">
-
             {% block content %}
-
             {% endblock %}
         </div>
-
     </div>
 </body>
 </html>
