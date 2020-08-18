@@ -126,6 +126,7 @@ def app_signup(request):
     #앱 에서 오는 POST 요청
     if request.method == "GET":
         return render(request, 'main/app_signup.html')
+
     elif request.method == "POST":
         #data = JSONParser().parse(request)
         #serializer = PostSerializer(data=data)

@@ -193,9 +193,16 @@
                     </nav>
                 </div>
             </div>
+            {%if request.session.user%}
+            <div class="logo">
+                <a href="/home"><img src="/static/img/자동감시로고.png" width="97px" height="94px" alt="logo" ></a>
+            </div>
+            {%else%}
             <div class="logo">
                 <a href="/"><img src="/static/img/자동감시로고.png" width="97px" height="94px" alt="logo" ></a>
             </div>
+            {% endif %}
+
             <hr color="white" width="100%">
             <h2>Welcome to AutoWatching APP</h2>
             <h3>This is a app that ~~~</h3>
