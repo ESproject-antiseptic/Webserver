@@ -12,5 +12,7 @@ urlpatterns = [
     path('dropout',views.dropout, name="dropout"),
 
     path('app_signup', views.app_signup, name='app_signup'),
-    path('app_login',views.app_login)
+    path('app_login',views.app_login),
+    path('app_image',views.app_image),
+    path('app_delete',views.app_delete)
 ]

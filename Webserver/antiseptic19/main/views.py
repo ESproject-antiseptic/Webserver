@@ -9,6 +9,7 @@ import simplejson
 #CSRF TOKEN 무효
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from django.core.files.storage import FileSystemStorage
 
 
 # Create your views here.
@@ -133,13 +134,14 @@ def app_signup(request):
         email = request.POST.get('email',None)
         password = request.POST.get('password',None)
         name = request.POST.get('name', None)
+        image = request.POST.getlist('image')
         #email = serializer['email']
         #password = serializer['password']
         #name=serializer['name']
         #사용자 정보를 사용자가 저장하기위해
         #여기서 Data  를 response 로 다시 보내줘야함
         
-       
+        print(email)
         user = User(email=email,password=make_password(password),name=name)
         user.save()
         
@@ -161,28 +163,37 @@ def app_login(request):
         #받은 이메일이랑 비밀번호 =데이터와 일치하면
         #리턴값으로 숫자 200 = 로그인 성공
         #일치 안하면 숫자 100 = 로그인 실패
-        try:
-            #아이디가 있다면
-            myuser = User.objects.get(email=email)
-            #db에서 꺼내는 명령. Post로 받아온 username으로 , db의 username을 꺼내온다.
-            if check_password(password, myuser.password):
-                request.session['user'] = myuser.email
+        myuser = User.objects.get(email=email)
+        #db에서 꺼내는 명령.Post로 받아온 username으로 , db의 username을 꺼내온다.
+        if check_password(password, myuser.password):
                 #세션도 딕셔너리 변수 사용과 똑같이 사용하면 된다.
-                #세션 user라는 key에 방금 로그인한 id를 저장한것.
-                
+                #세션 user라는 key에 방금 로그인한 id를 저장한것.            
+            return HttpResponse(simplejson.dumps({"email":email,"password":password,"name":myuser.name}))
+        else:
+            return HttpResponse(simplejson.dumps({"email":email,"password":password,"name":"Fail"}))
 
-                return HttpResponse(simplejson.dumps({"confirm": "login"}))
-            else:
-                return HttpResponse(simplejson.dumps({"confirm": "비밀번호가 틀렸습니다."}))
-        #아이디가 존재하지 않을 경우
-        except:
-            HttpResponse(simplejson.dumps({"confirm": "가입하지 않은 아이디입니다."}))
-            # messages.add_message(request, messages.INFO, '가입하지 않은 아이디입니다.') # 첫번째, 초기지원
-    #아이디 삭제
-    elif request.method=="DELETE":
+        
+
+@method_decorator(csrf_exempt,name='dispatch')
+def app_delete(request):
+    if request.method == "POST":
         email = request.POST.get('email',None)
         password = request.POST.get('password',None)
-        User.objects.delete(email=email)
+        mydelete = User.objects.get(email=email)
+        mydelete.delete()
+        return HttpResponse(1)
 
- 
+
+@method_decorator(csrf_exempt,name='dispatch')
+def app_image(request):
+    #앱에서 오는 로그인 요청
+    if request.method == "POST":
+        res_data = {}
+        image = request.FILES['image']
+        fs = FileSystemStorage()
+        res_data['image_url'] = fs.url(image.name)
+        print(image.name)
+        HttpResponse(simplejson.dumps({'path':"good"}))
+        
+    
     
