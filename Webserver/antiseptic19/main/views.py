@@ -164,6 +164,7 @@ def app_login(request):
         #리턴값으로 숫자 200 = 로그인 성공
         #일치 안하면 숫자 100 = 로그인 실패
         try:
+            #아이디가 있다면
             myuser = User.objects.get(email=email)
             #db에서 꺼내는 명령. Post로 받아온 username으로 , db의 username을 꺼내온다.
             if check_password(password, myuser.password):
@@ -172,13 +173,14 @@ def app_login(request):
                 #세션 user라는 key에 방금 로그인한 id를 저장한것.
                 
 
-                return HttpResponse(200)
+                return HttpResponse(simplejson.dumps({"confirm": "login"}))
             else:
-                return HttpResponse(100)
+                return HttpResponse(simplejson.dumps({"confirm": "비밀번호가 틀렸습니다."}))
         #아이디가 존재하지 않을 경우
         except:
-                messages.add_message(request, messages.INFO, '가입하지 않은 아이디입니다.') # 첫번째, 초기지원
-   #아이디 삭제
+            HttpResponse(simplejson.dumps({"confirm": "가입하지 않은 아이디입니다."}))
+            # messages.add_message(request, messages.INFO, '가입하지 않은 아이디입니다.') # 첫번째, 초기지원
+    #아이디 삭제
     elif request.method=="DELETE":
         email = request.POST.get('email',None)
         password = request.POST.get('password',None)
