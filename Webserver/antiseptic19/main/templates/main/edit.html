@@ -1,0 +1,68 @@
+{%extends 'main/top.html' %}
+<div class="edit_field">
+    <h4>프로필 편집하기</h4>
+
+    <form method="POST"  action ="{%url 'signup'%}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="field">
+            <div class = "form-group">
+                <label for= "new_password" class="labelid">Password&nbsp&nbsp </label>
+                <input name = "password" type ="password" id="password" >
+                <span class="label">(영문 대소문자/숫자/특수문자 중 2가지 이상 조합, 10자~16자)</span>
+            </div>
+
+        </div>
+
+        <div class="field">
+            <div class = "form-group">
+                <label for= "re_password" class="labelid">비밀번호 확인&nbsp&nbsp </label>
+                <input name = "re_password" type ="password" id="re_password" >
+                <span class="label">(영문 대소문자/숫자/특수문자 중 2가지 이상 조합, 10자~16자)</span>
+            </div>
+        </div>
+
+        <div class="field">
+            <label for= "name" class="labelid">username&nbsp&nbsp </label>
+            <input name = "name" type ="text" id="name" >
+            <span class="label">김혜원</span>
+        </div>
+
+        <div class="field">
+            <label for= "userimage" class="labelid">userImage&nbsp&nbsp </label>
+            <input type = "file" class="form-control" id="userimage" name="userimage"
+                                        style="widows: 200px" accept=".png, .jpeg, .jpg">
+
+        </div>
+        <br>
+        <br>
+        <div align="center">
+            <button type="submit" class ="signup" id="signup" > <p>회원가입</p></button>
+            <button type="button" class ="btn btn-light"  onclick="location.href='/'"><p >이전으로</p></button>
+            <script>
+                $('.signup').click(function(){
+                    if ($('.email').attr("check_result") == "fail"){
+                        alert("아이디 중복체크를 확인하세요.");
+                        $('.username_input').focus();
+                        return false;
+                    }
+                });
+            </script>
+        </div>
+        <br>
+        <br>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="row" style="text-align:center">
+                <div class="col-sm-6" style="text-align:center">
+                    <div class="alert alert-danger" style="text-align:center">
+                    <strong>{{ message.tags }}!</strong> {{ message.message }}
+                    </div>
+                </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </form>
+</div>
+
+{% endblock %}

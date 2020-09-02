@@ -97,6 +97,8 @@ def signup(request):   #회원가입 페이지를 보여주기 위한 함수
 
 def home(request):
     return render(request, 'main/home.html')
+def edit(request):
+    return render(request, 'main/edit.html')
 
 def logout(request):
     if request.session.get('user'):
