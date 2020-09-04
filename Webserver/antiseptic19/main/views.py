@@ -127,25 +127,19 @@ def app_signup(request):
     #앱 에서 오는 POST 요청
     if request.method == "GET":
         return render(request, 'main/app_signup.html')
-
     elif request.method == "POST":
         #data = JSONParser().parse(request)
         #serializer = PostSerializer(data=data)
         email = request.POST.get('email',None)
         password = request.POST.get('password',None)
         name = request.POST.get('name', None)
-        image = request.POST.getlist('image')
-        #email = serializer['email']
-        #password = serializer['password']
-        #name=serializer['name']
-        #사용자 정보를 사용자가 저장하기위해
-        #여기서 Data  를 response 로 다시 보내줘야함
-        
         print(email)
-        user = User(email=email,password=make_password(password),name=name)
-        user.save()
-        
-        return HttpResponse(simplejson.dumps({"email":email,"password":password,"name":name}))
+        if User.objects.filter(email=email).exists:
+            return HttpResponse(simplejson.dumps({"email":email,"password":password,"name":"Fail"}))
+        else:
+            user = User(email=email,password=make_password(password),name=name)
+            user.save()
+            return HttpResponse(simplejson.dumps({"email":email,"password":password,"name":name}))
 #방 생성 통신 올때 난수코드를 바로 관리자에게 보여줘야함.
 #POST 요청 -> data를 다시 response로 보내줌
 #데이터 모델을 USER 외에 ROOM 을 하나 더 만듬.
@@ -163,14 +157,17 @@ def app_login(request):
         #받은 이메일이랑 비밀번호 =데이터와 일치하면
         #리턴값으로 숫자 200 = 로그인 성공
         #일치 안하면 숫자 100 = 로그인 실패
-        myuser = User.objects.get(email=email)
-        #db에서 꺼내는 명령.Post로 받아온 username으로 , db의 username을 꺼내온다.
-        if check_password(password, myuser.password):
+        if User.DoesNotExist:
+            return HttpResponse(simplejson.dumps({"email":"aa","password":"aa","name":"Fail"}))
+        else: 
+            myuser = User.objects.get(email=email)
+            #db에서 꺼내는 명령.Post로 받아온 username으로 , db의 username을 꺼내온다.
+            if check_password(password, myuser.password):
                 #세션도 딕셔너리 변수 사용과 똑같이 사용하면 된다.
                 #세션 user라는 key에 방금 로그인한 id를 저장한것.            
-            return HttpResponse(simplejson.dumps({"email":email,"password":password,"name":myuser.name}))
-        else:
-            return HttpResponse(simplejson.dumps({"email":email,"password":password,"name":"Fail"}))
+                return HttpResponse(simplejson.dumps({"email":email,"password":password,"name":myuser.name}))
+            else:
+                return HttpResponse(simplejson.dumps({"email":email,"password":password,"name":"Fail"}))
 
         
 
@@ -181,7 +178,7 @@ def app_delete(request):
         password = request.POST.get('password',None)
         mydelete = User.objects.get(email=email)
         mydelete.delete()
-        return HttpResponse(1)
+        return HttpResponse(200)
 
 
 @method_decorator(csrf_exempt,name='dispatch')
@@ -191,9 +188,12 @@ def app_image(request):
         res_data = {}
         image = request.FILES['image']
         fs = FileSystemStorage()
-        res_data['image_url'] = fs.url(image.name)
-        print(image.name)
-        HttpResponse(simplejson.dumps({'path':"good"}))
-        
-    
+        res_data['image_url'] = fs.url(image.name)    
+        text=list(image.name)
+        del text[len(text)-4:len(text)]
+        a=''.join(text)
+        myuser = User.objects.get(email=a)
+        myuser.userimage=image
+        myuser.save()
+        return HttpResponse(simplejson.dumps({'path':"good"}))
     
