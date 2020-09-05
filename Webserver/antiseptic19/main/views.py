@@ -95,9 +95,6 @@ def signup(request):   #회원가입 페이지를 보여주기 위한 함수
             return render(request, 'main/success.html', res_data) #register를 요청받으면 register.
 
 
-
-def home(request):
-    return render(request, 'main/home.html')
 def edit(request):
     return render(request, 'main/edit.html')
 
@@ -117,8 +114,11 @@ def mypage(request):
 def dropout(request):
     del (request.session['user'])
     del (request.session['name'])
+    # DB삭제 코드
 
     return redirect('/')
+
+
 
 
 
