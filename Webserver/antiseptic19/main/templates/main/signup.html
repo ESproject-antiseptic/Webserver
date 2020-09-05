@@ -3,10 +3,10 @@
 {% block content %}
 <style>
     .login{
-        width: 80%;
+        width: 70%;
     }
     .signup_field h4{
-        color: gray;
+        color: black;
         line-height: 5px;
         font-size: 1.4rem;
     }
@@ -27,7 +27,8 @@
     .signup_field button{
         display: block;
         float:left;
-        margin-right:20px;
+        margin-right:10px;
+        margin-left:10px;
         width: 45%;
         outline: none;
         background-color: #4277b2;
@@ -60,15 +61,16 @@
 
 <div class="signup_field">
     <h4>회원가입</h4>
+    <br>
 
     <form method="POST"  action ="{%url 'signup'%}" enctype="multipart/form-data">
         {% csrf_token %}
-        <div class="field">
-            <label for= "email" class="labelid">&nbsp&nbsp Email &nbsp&nbsp&nbsp&nbsp</label>
-            <input class ="email" name="email" id="email" check_result = "fail" type = "email"  >
+        <div class="field" >
+            <label for= "email" class="labelid"  style="float:left;" >&nbsp&nbsp&nbsp&nbsp Email &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+            <input class ="email" name="email" id="email" check_result = "fail" type = "email"  style="float:left;" >
             <span class="label">abc@gmail.com</span>
         </div>
-        <button type="button" class ="id_check" id ="id_check" onclick ="id_check_func()">email 확인</button>
+        <button type="button" class ="id_check" id ="id_check" onclick ="id_check_func()" style=" float:right; margin-right:0px; width: 120px; background-color: gray; border: 1px solid gray;">email 확인</button>
         <br>
         <script src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script type="text/javascript">
@@ -101,7 +103,7 @@
 
         <div class="field">
             <div class = "form-group">
-                <label for= "password" class="labelid">Password&nbsp&nbsp </label>
+                <label for= "password" class="labelid">&nbsp&nbsp Password&nbsp&nbsp </label>
                 <input name = "password" type ="password" id="password" >
                 <span class="label">(영문 대소문자/숫자/특수문자 중 2가지 이상 조합, 10자~16자)</span>
             </div>
@@ -110,20 +112,20 @@
 
         <div class="field">
             <div class = "form-group">
-                <label for= "re_password" class="labelid">비밀번호 확인&nbsp&nbsp </label>
+                <label for= "re_password" class="labelid">P.W  Confirm </label>
                 <input name = "re_password" type ="password" id="re_password" >
                 <span class="label">(영문 대소문자/숫자/특수문자 중 2가지 이상 조합, 10자~16자)</span>
             </div>
         </div>
 
         <div class="field">
-            <label for= "name" class="labelid">username&nbsp&nbsp </label>
+            <label for= "name" class="labelid">&nbsp&nbsp username&nbsp&nbsp </label>
             <input name = "name" type ="text" id="name" >
             <span class="label">김혜원</span>
         </div>
 
         <div class="field">
-            <label for= "userimage" class="labelid">userImage&nbsp&nbsp </label>
+            <label for= "userimage" class="labelid">&nbsp userImage&nbsp&nbsp </label>
             <input type = "file" class="form-control" id="userimage" name="userimage"
                                         style="widows: 200px" accept=".png, .jpeg, .jpg">
 
@@ -131,8 +133,9 @@
         <br>
         <br>
         <div align="center">
-            <button type="submit" class ="signup" id="signup" > <p>회원가입</p></button>
             <button type="button" class ="btn btn-light"  onclick="location.href='/'"><p >이전으로</p></button>
+            <button type="submit" class ="signup" id="signup" > <p>회원가입</p></button>
+
             <script>
                 $('.signup').click(function(){
                     if ($('.email').attr("check_result") == "fail"){

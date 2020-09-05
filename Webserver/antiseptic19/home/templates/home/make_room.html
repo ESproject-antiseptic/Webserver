@@ -1,7 +1,113 @@
 {%extends 'main/top.html' %}
 {% block content %}
-<h4>방만들기 화면</h4>
-<div align="center">
-    <button type="button" class ="btn btn-light"  onclick="location.href='/home'"><p >이전으로</p></button>
+<style>
+    .login{
+        width: 60%;
+    }
+    .make_room_field h4{
+        color: black;
+        line-height: 5px;
+        font-size: 1.4rem;
+    }
+    .make_room_field .field{
+        padding: 5px;
+        margin-top: 20px;
+        position: relative;
+    }
+    .make_room_field input{
+        width: 60%;
+        border: none;
+        outline: none;
+        border-bottom: 1px solid #999;
+        color: black;
+        font-size: 1rem;
+    }
+    .make_room_field a{
+        width: 60%;
+        border: none;
+        outline: none;
+        color: black;
+        font-size: 1rem;
+    }
+
+    .make_room_field button{
+        display: block;
+        margin-right:10px;
+        margin-left:10px;
+        width: 40%;
+        outline: none;
+        background-color: #4277b2;
+        border: 1px solid #4277b2;
+        border-radius: 10px;
+        color: white;
+        font-size: 1rem;
+        cursor: pointer;
+
+    }
+    .make_room_field .labelid{
+        color: gray;
+    }
+
+</style>
+<div class="make_room_field">
+    <h4>방만들기 </h4>
+    <br>
+    <form method="POST"  action ="{%url 'make_room'%}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="field" >
+            <label for= "admin" class="labelid"  style="float:left;" >&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Admin &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+            <!--<input class ="admin" name="admin" id="admin" >-->
+            <a class="admin" name="admin" id="admin"> {{request.session.user}}</a>
+        </div>
+        <br>
+
+        <div class="field" >
+            <label for= "room_name" class="labelid"  style="float:left;" >&nbsp&nbsp&nbsp&nbsp Room Name &nbsp&nbsp&nbsp&nbsp&nbsp</label>
+            <input class ="room_name" name="room_name" id="room_name" check_result = "fail"  style="float:left;" >
+        </div>
+        <button type="button" class ="room_check" id ="room_check" onclick ="room_check_func()" style=" float:right; margin-right:0px; width: 120px; background-color: gray; border: 1px solid gray;">email 확인</button>
+        <br>
+        <script src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script type="text/javascript">
+            function room_check_func(){
+                room_overlap_input =document.querySelector('input[name = "room_name"]');
+                if ( room_overlap_input.value == '') {
+                    alert('방 이름을 입력해주세요.');
+                    return;
+                }
+                $.ajax({
+                    url: '{%url 'make_room'%}',
+                    data: { 'room_name' : room_overlap_input.value},
+                    success: function (data){
+                        console.log(data['overlap']);
+                        if (data['overlap'] =="fail"){
+                            alert("이미 존재하는 방 이름입니다.");
+                            id_overlap_input.focus();
+                            return;
+                        }else{
+                            alert("사용가능한 방 이름입니다.");
+                            $('.email').attr("check_result", "success");
+                            return;
+                        }
+                    }
+                })
+            }
+            </script>
+        <br>
+
+        <div class="field" >
+            <label for= "room_ps" class="labelid"  style="float:left;" > &nbsp&nbsp Room Password &nbsp&nbsp </label>
+            <input class ="room_ps" name="room_ps" id="room_ps" >
+        </div>
+        <br>
+    </form>
+    <center>
+        <button type="button" class ="btn btn-light"  onclick="location.href='/home'" style="float:left;"><p >이전으로</p></button>
+        <button type="submit" class ="make_room"  id="make_room" style="float:right;"><p >방 만들기</p></button>
+    </center>
+    <br><br><br>
+
+
 </div>
+
 {% endblock %}
