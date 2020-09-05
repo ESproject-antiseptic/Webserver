@@ -99,6 +99,32 @@ def signup(request):   #회원가입 페이지를 보여주기 위한 함수
 def home(request):
     return render(request, 'main/home.html')
 def edit(request):
+    if request.method == "GET" :
+        return render(request, 'main/edit.html') 
+
+    elif request.method == "POST":
+        password = request.POST.get('password',None)
+        re_password = request.POST.get('re_password',None)
+        name = request.POST.get('name', None)
+        
+        if not (name and password and re_password) :
+            messages.add_message(request, messages.INFO, '모든 값을 입력해야 합니다.!') # 첫번째, 초기지원
+            return render(request, 'main/signup.html') #register를 요청받으면 register.html 로 응답.
+
+        if password != re_password :
+            #return HttpResponse('비밀번호가 다릅니다.')
+            messages.add_message(request, messages.INFO, '비밀번호가 다릅니다.') # 첫번째, 초기지원
+            return render(request, 'main/signup.html') #register를 요청받으면 register.html 로 응답.
+
+        else :
+            user = User(password=make_password(password),name=name)
+            user.name
+            user.save()
+            messages.add_message(request, messages.INFO, '프로필 편집이 완료되었습니다.')
+            # return redirect("/")
+
+            return render(request, 'main/success.html') #register를 요청받으면 register.
+
     return render(request, 'main/edit.html')
 
 def logout(request):

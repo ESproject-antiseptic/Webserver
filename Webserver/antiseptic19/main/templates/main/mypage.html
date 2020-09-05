@@ -2,16 +2,19 @@
 {% block content %}
 <h4>MYPAGE</h4>
 <div align="center">
-    <h2>{{request.session.name}}님 안녕하세요</h2>
-    <a href="#">
-        <button type="button" class="btn btn-default" onclick="location.href='/edit'">프로필 편집</button>
-    </a>
+    <h1>{{user.name}}님 안녕하세요<h1>
+    <h4>
     <br>
     이메일 : {{user.email}} <br>
     사용자명 : {{user.name}} <br>
     비밀번호 : {{user.password}} <br>
     사진 :
     <a href = "{{ user.userimage.url }}"><img class ="img-responsive img-center" src = "{{ user.userimage.url }}" width="100" height="100"/></a>
+    <br>
+    <h4>
+    <a href="#">
+    <button type="button" class="btn btn-default" onclick="location.href='/edit'">프로필 편집</button>
+    </a>
     <br>
     <button type="button" class ="btn btn-light"  onclick="location.href='/'"><p >이전으로</p></button>
     <button type="button" class ="delete"  onclick="location.href='/dropout'"><p >회원탈퇴</p></button>

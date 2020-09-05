@@ -10,6 +10,7 @@ urlpatterns = [
     path('logout',views.logout,name='logout'),
     path('home/mypage',views.mypage, name="mypage"),
     path('dropout',views.dropout, name="dropout"),
+    path('edit',views.edit, name="edit"),
 
     path('app_signup', views.app_signup, name='app_signup'),
     path('app_login',views.app_login),
