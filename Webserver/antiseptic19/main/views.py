@@ -117,13 +117,15 @@ def edit(request):
             return render(request, 'main/signup.html') #register를 요청받으면 register.html 로 응답.
 
         else :
-            user = User(password=make_password(password),name=name)
-            user.name
-            user.save()
+            user_email=request.session.get('user')
+            myuser=User.objects.get(email=user_email)
+            myuser.password=make_password(password)
+            myuser.name=name
+            myuser.save()
             messages.add_message(request, messages.INFO, '프로필 편집이 완료되었습니다.')
             # return redirect("/")
 
-            return render(request, 'main/success.html') #register를 요청받으면 register.
+            return render(request, 'main/success1.html') #register를 요청받으면 register.
 
     return render(request, 'main/edit.html')
 
@@ -141,10 +143,14 @@ def mypage(request):
     return render(request,"main/mypage.html", list)
 
 def dropout(request):
+    user_email=request.session.get('user')
+    myuser=User.objects.get(email=user_email)
+    myuser.delete()
+
     del (request.session['user'])
     del (request.session['name'])
 
-    return redirect('/')
+    return render(request, 'main/dropout.html')
 
 
 
