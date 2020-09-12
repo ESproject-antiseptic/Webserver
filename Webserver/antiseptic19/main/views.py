@@ -134,12 +134,14 @@ def app_signup(request):
         password = request.POST.get('password',None)
         name = request.POST.get('name', None)
         print(email)
-        if User.objects.filter(email=email).exists:
+        if User.objects.filter(email=email).exists():
             return HttpResponse(simplejson.dumps({"email":email,"password":password,"name":"Fail"}))
+            
         else:
             user = User(email=email,password=make_password(password),name=name)
             user.save()
             return HttpResponse(simplejson.dumps({"email":email,"password":password,"name":name}))
+           
 #방 생성 통신 올때 난수코드를 바로 관리자에게 보여줘야함.
 #POST 요청 -> data를 다시 response로 보내줌
 #데이터 모델을 USER 외에 ROOM 을 하나 더 만듬.
@@ -157,9 +159,7 @@ def app_login(request):
         #받은 이메일이랑 비밀번호 =데이터와 일치하면
         #리턴값으로 숫자 200 = 로그인 성공
         #일치 안하면 숫자 100 = 로그인 실패
-        if User.DoesNotExist:
-            return HttpResponse(simplejson.dumps({"email":"aa","password":"aa","name":"Fail"}))
-        else: 
+        if User.objects.filter(email=email).exists():
             myuser = User.objects.get(email=email)
             #db에서 꺼내는 명령.Post로 받아온 username으로 , db의 username을 꺼내온다.
             if check_password(password, myuser.password):
@@ -168,8 +168,9 @@ def app_login(request):
                 return HttpResponse(simplejson.dumps({"email":email,"password":password,"name":myuser.name}))
             else:
                 return HttpResponse(simplejson.dumps({"email":email,"password":password,"name":"Fail"}))
-
-        
+            
+        else:
+            return HttpResponse(simplejson.dumps({"email":"aa","password":"aa","name":"Fail"}))
 
 @method_decorator(csrf_exempt,name='dispatch')
 def app_delete(request):
@@ -179,7 +180,6 @@ def app_delete(request):
         mydelete = User.objects.get(email=email)
         mydelete.delete()
         return HttpResponse(200)
-
 
 @method_decorator(csrf_exempt,name='dispatch')
 def app_image(request):
@@ -195,5 +195,13 @@ def app_image(request):
         myuser = User.objects.get(email=a)
         myuser.userimage=image
         myuser.save()
-        return HttpResponse(simplejson.dumps({'path':"good"}))
-    
+        return HttpResponse(myuser.userimage)
+@method_decorator(csrf_exempt,name='dispatch')
+def app_modify(request):
+    if request.method == "POST":
+        email = request.POST.get("email",None)
+        name = request.POST.get("name",None)
+        myuser = User.objects.get(email=email)
+        myuser.name=name
+        myuser.save()
+        return HttpResponse(simplejson.dumps({"email":"aa","password":"aa","name":myuser.name}))
