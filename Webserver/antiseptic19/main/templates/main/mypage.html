@@ -1,24 +1,61 @@
 {%extends 'main/top.html' %}
 {% block content %}
-<h4>MYPAGE</h4>
-<div align="center">
-    <h2>{{request.session.name}}님 안녕하세요</h2>
-    <a href="#">
-        <button type="button" class="btn btn-default" onclick="location.href='/edit'">프로필 편집</button>
-    </a>
-    <br>
-    이메일 : {{user.email}} <br>
-    사용자명 : {{user.name}} <br>
-    비밀번호 : {{user.password}} <br>
-    사진 :
-    <a href = "{{ user.userimage.url }}"><img class ="img-responsive img-center" src = "{{ user.userimage.url }}" width="100" height="100"/></a>
-    <br>
-    <button type="button" class ="btn btn-light"  onclick="location.href='/'"><p >이전으로</p></button>
-    <button type="button" class ="delete"  onclick="location.href='/dropout'"><p >회원탈퇴</p></button>
+<style>
+    .button{
+        display: block;
+        width: 30%;
+        outline: none;
+        background-color: #4277b2;
+        border: 1px solid #4277b2;
+        border-radius: 10px;
+        color: white;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+    .b1{
+        display: block;
+        float:right;
+        margin-right:25px;
+        width: 40%;
+        outline: none;
+        background-color: #4277b2;
+        border: 1px solid #4277b2;
+        border-radius: 10px;
+        color: white;
+        font-size: 1rem;
+        cursor: pointer;
+    } 
+</style>
+    <h4>MYPAGE</h4>
+    <div align="center">
+        <div class ="mypage_field">
+        <h1>{{user.name}}님 안녕하세요<h1>
+        <h4>
+        <br>
+        <div align="left">
+        이메일 : {{user.email}} <br><br>
+        사용자명 : {{user.name}} <br><br>
 
-    <script src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script>
+        사진 :
+        </div>
+        <a href = "{{ user.userimage.url }}"><img class ="img-responsive img-center" src = "{{ user.userimage.url }}" width="150" height="150"/></a>
+        <br>
+        <h4>
+        </div>
+        <button type="button" class="button b1" onclick="location.href='/edit'"><p >프로필 편집</p></button>
+        <button type="button"  class="button b1" onclick="location.href='/dropout'"><p >회원탈퇴</p></button>
+        <br>
+        <br>
+        <br>
+        <br>
 
-    </script>
-</div>
+
+        <button type="button"  class="button" onclick="location.href='/'"><p >이전으로</p></button>
+
+        <script src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script>
+
+        </script>
+    </div>
+
 {% endblock %}
