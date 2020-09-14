@@ -4,6 +4,7 @@
     .login{
         width: 60%;
     }
+
     .make_room_field h4{
         color: black;
         line-height: 5px;
@@ -87,9 +88,8 @@
 
 </style>
 <div class="make_room_field">
-    <h4>방만들기 </h4>
-    <br>
-    <form method="POST"  action ="{%url 'make_room'%}" enctype="multipart/form-data">
+    <h4><img src="/static/img/door.png" width="40px" height="75px" alt="door_icon" style="vertical-align:middle" >&nbsp&nbsp&nbsp MAKE &nbsp ROOM</h4>
+    <form method="POST"  action ="{%url 'make_room'%}" enctype="multipart/form-data" style="border: 1px solid #4277b2; border-radius: 10px; padding-right:5px; margin:-5px;">
         {% csrf_token %}
         <div class="field" >
             <label for= "admin" class="labelid"  style="float:left;" >&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Admin &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
@@ -238,23 +238,22 @@
             </section>
             <!--<button type="button" class ="room_func" name="room_func" id="room_func" style=" float:right; margin-right:0px; width: 140px; background-color: gray; border: 1px solid gray;">기능 선택</button>-->
         </div>
-        <br>
-
-        <div align ="center">
-            <button type="submit" class ="make_room"  id="make_room" style="float:right;"><p >방 만들기</p></button>
-            <button type="button" class ="btn btn-light"  onclick="location.href='/home'" style="float:left;"><p >이전으로</p></button>
-            <script>
-                $('.make_room').click(function(){
-                    if ($('.room_name').attr("check_result") == "fail"){
-                        alert("방이름 중복체크를 확인하세요.");
-                        return false;
-                    }
-                });
-            </script>
-        </div>
     </form>
-    <br><br><br>
+    <br><br>
+    <div align ="center">
+        <button type="submit" class ="make_room"  id="make_room" style="float:right;"><p >방 만들기</p></button>
+        <button type="button" class ="btn btn-light"  onclick="location.href='/home'" style="float:left;"><p >이전으로</p></button>
+        <script>
+            $('.make_room').click(function(){
+                if ($('.room_name').attr("check_result") == "fail"){
+                    alert("방이름 중복체크를 확인하세요.");
+                    return false;
+                }
+            });
+        </script>
+    </div>
 
+    <br><br><br>
 
 </div>
 
