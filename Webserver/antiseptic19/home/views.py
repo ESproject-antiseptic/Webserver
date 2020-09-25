@@ -75,6 +75,21 @@ def make_room(request): #방만들기
 def enter_room(request):
     return render(request,'home/enter_room.html')
 
+def myroom(request):
+    return render(request, 'home/myroom.html')
+
+def myroom1(request):
+    user_email=request.session.get('user')
+    admin = User.objects.get(email=user_email)
+    room = Room.objects.filter(admin=admin)
+    rooms= room.order_by('-id')
+    return render(request, 'home/myroom1.html', {"rooms":rooms})
+
+
+
+
+
 #우림이 test해보기
 def test(request):
     return render(request, 'home/test.html')
+
