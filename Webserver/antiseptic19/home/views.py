@@ -1,8 +1,13 @@
-from django.http import JsonResponse
+from django.http import JsonResponse,HttpResponse
 from django.shortcuts import render,redirect
 from .models import *
 from main.models import*
+from . import views
 from django.contrib import messages
+import simplejson
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from django.core.files.storage import FileSystemStorage
 
 
 # Create your views here.
@@ -78,3 +83,51 @@ def enter_room(request):
 #우림이 test해보기
 def test(request):
     return render(request, 'home/test.html')
+#앱 이름 비번 명단 모두 제출시
+@method_decorator(csrf_exempt,name='dispatch')
+def app_makeroom(request):
+    if request.method == "GET":
+        return render(request, 'home/make_room.html')
+    if request.method =="POST":
+        #res_data = {}
+        myfile = request.FILES['files']
+        myemail = request.POST.get('admin') #아이디(이멜)
+        myadmin = User.objects.get(email=myemail)
+        myname = request.POST.get('name')
+        mypass = request.POST.get('pass')
+        mycheckbox = request.POST.get('checkbox')
+        print(myname)
+        #fs = FileSystemStorage()
+        #res_data['file_url'] = fs.url(file.name)
+        print(myfile)
+        myuser = Room(room_name=myname,room_ps=mypass,admin=myadmin,room_func=mycheckbox)
+        myuser.room_member = myfile
+        myuser.save()
+        return HttpResponse(simplejson.dumps({"file":myfile.name}))
+#앱 이름 비번만 제출시
+@method_decorator(csrf_exempt,name='dispatch')
+def app_makemyroom(request):
+    if request.method == "GET":
+        return render(request, 'home/make_room.html')
+    if request.method =="POST":
+        #res_data = {}
+        myemail = request.POST.get('admin') #아이디(이멜)
+        myadmin = User.objects.get(email=myemail)
+        roomname = request.POST.get('roomname')
+        password = request.POST.get('password')
+        mycheckbox = request.POST.get('checkbox')
+        myuser = Room(room_name=roomname,room_ps=password,admin=myadmin,room_func=mycheckbox)
+        myuser.save()
+        print(myuser)
+        return HttpResponse(simplejson.dumps({"roomname":roomname,"password":password}))
+
+#앱 중복체크
+@method_decorator(csrf_exempt,name='dispatch')
+def app_roomnumber(request):
+    if request.method =="POST":
+        roomname = request.POST.get("roomname")
+        print(roomname)
+        if Room.objects.filter(room_name=roomname).exists():
+            return HttpResponse(simplejson.dumps({"roomname":"exist"}))
+        else:
+            return HttpResponse(simplejson.dumps({"roomname":roomname}))
