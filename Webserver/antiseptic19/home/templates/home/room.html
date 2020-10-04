@@ -1,0 +1,15 @@
+{%extends 'main/top.html' %}
+{% block content %}
+
+<div class="room_field">
+    <h4> ___ ROOM</h4>
+    <a>캠이켜지고 기능이 동작해야함!!!!!!!!!!</a>
+    <form method="POST"  action ="{%url 'room'%}" enctype="multipart/form-data" >
+        {% csrf_token %}
+
+
+    </form>
+
+</div>
+
+{% endblock %}

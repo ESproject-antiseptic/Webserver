@@ -8,6 +8,7 @@ import simplejson
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.core.files.storage import FileSystemStorage
+from django.contrib.auth.hashers import make_password,check_password
 
 
 # Create your views here.
@@ -66,7 +67,7 @@ def make_room(request): #방만들기
             info['admin']=admin
             info['room_name']=room_name
             info['room_ps']=room_ps
-            room = Room(admin=admin, room_name=room_name, room_ps=room_ps, room_member=room_member,room_func=room_func)
+            room = Room(admin=admin, room_name=room_name, room_ps=make_password(room_ps), room_member=room_member,room_func=room_func)
             room.save()
             messages.add_message(request, messages.INFO, '방만들기가 성공하였습니다.')
         #fs = FileSystemStorage()
@@ -75,10 +76,58 @@ def make_room(request): #방만들기
         # print(uploaded_file_url)
 
             return render(request, 'home/make_room_success.html',info) #성공
-
+@csrf_exempt
 #방들어가기
 def enter_room(request):
-    return render(request,'home/enter_room.html')
+    if request.method == "GET":
+        return render(request,'home/enter_room.html')
+
+    elif request.method == "POST":
+        room_name = request.POST.get('room_name')
+        room_ps = request.POST.get('room_ps')
+
+        try:
+            room = Room.objects.get(room_name=room_name) #입력받은 room_name에 해당하는 방이 있는지 DB에서 검색
+            if check_password(room_ps, room.room_ps): #방이 존재한다면 해당 방의 room_ps와 입력받은 비번 검사
+                request.session['room_name']:room_name #room.room_name이라고해도 무방
+                messages.add_message(request, messages.INFO, '방입장 성공')
+                print('hihihi')
+                print(room.room_func)
+                #room 기능 속에 1번기능이 있다면
+                if '1' in room.room_func: #room_func은 리스트형식
+                    return redirect("/home/enter_room_recognition") #얼굴인식페이지로
+                #1번기능 없다면(얼굴인식 필요없음!!)
+                else:
+                    return redirect('room',room_name) #url이랑 여기 맞추는거 다시고쳐야함!
+
+            else:
+                messages.add_message(request,messages.INFO,'비밀번호가 틀렸습니다')
+
+        except Room.DoesNotExist: #room_name이없을때
+            messages.add_message(request.messages.INFO, '잘못된 방 코드입니다.')
+
+
+
+        return render(request, 'home/enter_room.html')
+
+#방 입장시 얼굴인식 페이지
+def enter_room_recognition(request):
+    if request.method == "GET":
+        return render(request, 'home/enter_room_recognition.html')
+
+    elif request.method == "POST":
+        member_number = request.POST.get('member_number')
+        member_name = request.POST.get('member_name')
+
+        #엑셀파일에서 이름찾기
+
+    return render(request, 'home/enter_room_recognition.html')
+
+#특정방
+def room(request,room_name):
+    print('hihi')
+    return render(request, 'home/room.html')
+
 
 def myroom(request):
     return render(request, 'home/myroom.html')
