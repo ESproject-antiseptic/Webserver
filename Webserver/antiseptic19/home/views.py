@@ -222,7 +222,7 @@ def app_makemyroom(request):
         roomname = request.POST.get('roomname')
         password = request.POST.get('password')
         mycheckbox = request.POST.get('checkbox')
-        myuser = Room(room_name=roomname,room_ps=password,admin=myadmin,room_func=mycheckbox)
+        myuser = Room(room_name=roomname,room_ps=make_password(password),admin=myadmin,room_func=mycheckbox)
         myuser.save()
         print(myuser)
         return HttpResponse(simplejson.dumps({"roomname":roomname,"password":password}))
