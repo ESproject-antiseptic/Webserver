@@ -1,5 +1,7 @@
 {%extends 'main/top.html' %}
 {% block content %}
+{% load static %}
+
 <style>
     .login{
         width: 500px;
@@ -68,11 +70,13 @@
         <div class="field">
             <label for= "member_name" class="labelid">이름 </label>
             <input name = "member_name"  id="member_name" required>
-            <span class="label">8자리이상</span>
+            <span class="label">홍길동</span>
         </div>
         <br>
 
-        <a>여기에 얼굴인식 캠키기</a>
+        <a>여기에 얼굴인식 캠키기 (일단임시로 cam키는것만 넣음 원래는 123초후 캡쳐해야함)</a>
+        <video autoplay playsinline></video>
+	    <script src="{% static 'js/video.js' %}"></script>
 
 
         <div align="center">

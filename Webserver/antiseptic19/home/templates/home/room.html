@@ -1,15 +1,14 @@
 {%extends 'main/top.html' %}
 {% block content %}
-
+{% load static %}
 <div class="room_field">
-    <h4> ___ ROOM</h4>
+    <h4> " {{request.session.room}} " ROOM에 오신걸 환영합니다.</h4>
     <a>캠이켜지고 기능이 동작해야함!!!!!!!!!!</a>
-    <form method="POST"  action ="{%url 'room'%}" enctype="multipart/form-data" >
-        {% csrf_token %}
-
-
-    </form>
+    <a>방안입니다.</a>
+    <video autoplay playsinline></video>
+	<script src="{% static 'js/video.js' %}"></script>
 
 </div>
+
 
 {% endblock %}

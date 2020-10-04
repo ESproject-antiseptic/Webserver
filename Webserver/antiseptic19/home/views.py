@@ -76,8 +76,9 @@ def make_room(request): #방만들기
         # print(uploaded_file_url)
 
             return render(request, 'home/make_room_success.html',info) #성공
-@csrf_exempt
+
 #방들어가기
+@csrf_exempt
 def enter_room(request):
     if request.method == "GET":
         return render(request,'home/enter_room.html')
@@ -109,6 +110,51 @@ def enter_room(request):
 
 
         return render(request, 'home/enter_room.html')
+
+#ajax로 방들어가기
+def enter_room2(request):
+    if request.method == "GET":
+        #ajax였으면
+        if (request.GET.get('room_name')):
+            print('hyewon')
+            room_name = request.GET.get('room_name')
+            room_ps= request.GET.get('room_ps')
+            info = {}
+            try:
+                room = Room.objects.get(room_name=room_name)  # 입력받은 room_name에 해당하는 방이 있는지 DB에서 검색
+                if check_password(room_ps, room.room_ps):  # 방이 존재한다면 해당 방의 room_ps와 입력받은 비번 검사
+                    request.session['room']=room_name  # room.room_name이라고해도 무방
+                    print('room')
+                    messages.add_message(request, messages.INFO, '방입장 성공')
+                    # room 기능 속에 1번기능이 있다면
+                    if '1' in room.room_func:  # room_func은 리스트형식
+                        info['confirm'] = "need"
+                        print('hyewon2:need')
+                        return JsonResponse(info)# 얼굴인식페이지로
+                    # 1번기능 없다면(얼굴인식 필요없음!!)
+                    else:
+                        info['confirm'] = "goroom"
+                        return JsonResponse(info)  #
+                else:
+                    info['confirm'] = "비밀번호가 틀렸습니다"
+                    return JsonResponse(info)
+
+            except Room.DoesNotExist:  # room_name이없을때
+                info['confirm'] = "잘못된 방 코드입니다."
+                return JsonResponse(info)
+
+        else:
+            return render(request,'home/enter_room2.html')
+
+    elif request.method == "POST":
+        room_name = request.POST.get('room_name')
+        room_ps = request.POST.get('room_ps')
+
+
+
+
+        return render(request, 'home/enter_room.html')
+
 
 #방 입장시 얼굴인식 페이지
 def enter_room_recognition(request):
