@@ -4,6 +4,7 @@ from .models import *
 from main.models import*
 from . import views
 from django.contrib import messages
+from django.core import serializers
 import simplejson
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
@@ -176,7 +177,7 @@ def app_makemyroom(request):
         roomname = request.POST.get('roomname')
         password = request.POST.get('password')
         mycheckbox = request.POST.get('checkbox')
-        myuser = Room(room_name=roomname,room_ps=password,admin=myadmin,room_func=mycheckbox)
+        myuser = Room(room_name=roomname,room_ps=make_password(password),admin=myadmin,room_func=mycheckbox)
         myuser.save()
         print(myuser)
         return HttpResponse(simplejson.dumps({"roomname":roomname,"password":password}))
@@ -192,7 +193,51 @@ def app_roomnumber(request):
             return HttpResponse(simplejson.dumps({"roomname":"exist"}))
         else:
             return HttpResponse(simplejson.dumps({"roomname":roomname}))
+@method_decorator(csrf_exempt,name='dispatch')
+def app_images(request):
+    if request.method == "POST":
+        res_data = {}
+        image = request.FILES['image']
+        fs = FileSystemStorage()
+        res_data['image_url'] = fs.url(image.name)    
+        text=list(image.name)
+        del text[len(text)-4:len(text)]
+        a=''.join(text)
+        myuser = User.objects.get(email=a)
+        myuser.userimage=image
+        myuser.save()
+        return HttpResponse(simplejson.dumps({"image":"Good"}))
+    
+@method_decorator(csrf_exempt,name='dispatch')
+def app_myroom(request):
+    user_email=request.POST.get("email")
+    admin=User.objects.get(email=user_email)
+    room=Room.objects.filter(admin=admin)
+    rooms=room.order_by('-id')
+    print(rooms.__len__())
+    print(rooms[0].room_name)
+    data=serializers.serialize('json',list(rooms))
+    print(data)
+    return HttpResponse(data)
 
-        # 우림이 test해보기
-        def test(request):
-            return render(request, 'home/test.html')
+@method_decorator(csrf_exempt,name='dispatch')
+def app_enter_room(request):
+    if request.method == "POST":
+        room_name = request.POST.get('roomname')
+        room_ps = request.POST.get('password')
+        print("roomname:",room_name)
+        print("password:",room_ps)
+        try:
+            room = Room.objects.get(room_name=room_name)
+            #입력받은 room_name에 해당하는 방이 있는지 DB에서 검색
+            if check_password(room_ps, room.room_ps): #방이 존재한다면 해당 방의 room_ps와 입력받은 비번 검사
+                #room 기능 속에 1번기능이 있다면
+                print(room)
+                if '1' in room.room_func: #room_func은 리스트형식
+                    return HttpResponse(simplejson.dumps({"roomname":"1"}))
+                #1번기능 없다면(얼굴인식 필요없음!!)
+                else:
+                    return HttpResponse(simplejson.dumps({"roomname":"2"}))
+        except Room.DoesNotExist: #room_name이없을때
+            return HttpResponse(simplejson.dumps({"roomname":"None"}))
+        return HttpResponse(simplejson.dumps({"roomname":"else"}))

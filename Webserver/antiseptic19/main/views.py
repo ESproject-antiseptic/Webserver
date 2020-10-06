@@ -229,7 +229,7 @@ def app_image(request):
         myuser = User.objects.get(email=a)
         myuser.userimage=image
         myuser.save()
-        return HttpResponse(myuser.userimage)
+        return HttpResponse(simplejson.dumps({"image":"Good"}))
 @method_decorator(csrf_exempt,name='dispatch')
 def app_modify(request):
     if request.method == "POST":

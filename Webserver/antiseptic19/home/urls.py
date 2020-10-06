@@ -14,5 +14,8 @@ urlpatterns = [
     path('app_roomnumber',views.app_roomnumber),
     path('app_makeroom',views.app_makeroom),
     path('app_makemyroom',views.app_makemyroom),
+    path('app_images',views.app_images),
+    path('app_myroom',views.app_myroom),
+    path('app_enter_room',views.app_enter_room),
 
 ]
