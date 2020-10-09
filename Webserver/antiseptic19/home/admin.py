@@ -8,7 +8,7 @@ from .models import *   #같은 경로의 models.py에서 User라는 클래스�
 
 @admin.register(Room)
 class RoomAdmin(admin.ModelAdmin):
-    list_display = ('admin', 'room_name','room_ps','room_member','room_func')  #,'userimage'
+    list_display = ('admin', 'room_name','room_ps','room_func', 'room_member','room_member_list')  #,'userimage'
     list_filter = ('admin',)
 
 

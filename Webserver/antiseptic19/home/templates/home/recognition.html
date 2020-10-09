@@ -1,0 +1,113 @@
+{%extends 'main/top.html' %}
+{% block content %}
+{% load static %}
+<style>
+    .login{
+        width: 500px;
+    }
+    .recognition_field h4{
+        color: gray;
+        line-height: 5px;
+        font-size: 1.4rem;
+    }
+    .recognition_field .field{
+        padding: 5px;
+        margin-top: 20px;
+        position: relative;
+    }
+    .recognition_field input{
+        width: 70%;
+        border: none;
+        outline: none;
+        border-bottom: 1px solid #999;
+        color: black;
+        font-size: 1rem;
+    }
+
+    .recognition_field button{
+        display: block;
+        width: 80%;
+        outline: none;
+        background-color: #4277b2;
+        border: 1px solid #4277b2;
+        border-radius: 10px;
+        color: white;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+    .recognition_field .labelid{
+        color: gray;
+    }
+    .recognition_field .label{
+        position: absolute;
+        pinter-events: none;
+        left:140px;
+        top: 5px;
+        transition: 0.2s ease all;
+        color: #A9CCE3;
+    }
+    .recognition_field input:focus ~ .label,
+    .recognition_field input:not(:focus):valid ~ .label{
+        top: -10px;
+        font-size: .8rem;
+        opacity: 1;
+    }
+
+
+</style>
+
+<div class="recognition_field">
+    <h4>방입장을 위한 신원확인</h4>
+    <!--form method="POST"를 하면안됌 : ulr이 특정 인자받아서하는거면!!!!!!이유는 모르겟움-->
+    <div class="field">
+        <label for= "member_number" class="labelid">학번&nbsp / &nbsp 수험번호</label>
+        <input name="member_number" id="member_number"  required >
+        <span class="label">123456789</span>
+    </div>
+
+    <div class="field">
+        <label for= "member_name" class="labelid">이름 </label>
+        <input name = "member_name"  id="member_name" required>
+        <span class="label">홍길동</span>
+    </div>
+    <br>
+
+    <a>원래버튼 클릭하면 얼굴인식되야함 여기에 얼굴인식 캠키기 (일단임시로 cam키는것만 넣음 원래는 123초후 캡쳐해야함)</a>
+    <video autoplay playsinline></video>
+	<script src="{% static 'js/video.js' %}"></script>
+
+    <br>
+    <div align="center">
+        <button type="button" class ="bt_enter_room_recognition" onclick="recognition()" ><p>방입장</p></button>
+        <br>
+        <button type="button" class ="btn btn-light"  onclick="location.href='/home'" ><p >이전으로</p></button>
+        <script type="text/javascript">
+          function recognition() {
+            var confirm_val = confirm("ddd");
+                if(confirm_val) {
+                    $.ajax({
+                        url : '{%url 'recognition' %}',
+                        type : "GET",
+                        data : { 'member_number' : $('#member_number').val(),
+                        'member_name':$('#member_name').val()},
+                        success : function(data){
+                            if (data['result'] =="ok"){
+                                <!--얼굴인식완료-->
+                                location.href = ("/home/room/"+data['room_name']);
+                            }
+                            else {
+                                alert("인식불가");
+                                location.href = "/home/enter_room2";
+                            }
+                        }
+                    });
+                }
+          }
+        </script>
+
+    </div>
+
+</div>
+
+
+{% endblock %}

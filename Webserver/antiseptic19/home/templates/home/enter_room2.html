@@ -72,10 +72,10 @@
         </div>
         <br>
         <div align="center">
-            <button type="button" class ="enter_room" id="enter_room_btn" onclick="hihi()"><p>방입장</p></button>
+            <button type="button" class ="enter_room" id="enter_room_btn" onclick="enter_room()"><p>방입장</p></button>
             <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
             <script type="text/javascript">
-              function hihi() {
+              function enter_room() {
                 var confirm_val = confirm("해당 방에 입장 하시겠습니까?");
                     if(confirm_val) {
                         $.ajax({
@@ -89,7 +89,8 @@
                                     location.href = "/home/enter_room_recognition";
                                 }
                                 else if(data['confirm'] =="goroom"){
-                                    location.href = "/home/room/{{request.session.room}}";
+                                    alert(data['room_name']);
+                                    location.href = ("/home/room/"+data['room_name']);
                                 }
                                 else{
                                     alert(data['confirm']);

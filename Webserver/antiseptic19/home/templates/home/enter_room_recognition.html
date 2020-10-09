@@ -1,7 +1,6 @@
 {%extends 'main/top.html' %}
 {% block content %}
 {% load static %}
-
 <style>
     .login{
         width: 500px;
@@ -59,8 +58,7 @@
 
 <div class="recognition_field">
     <h4>방입장을 위한 신원확인</h4>
-    <form method="POST"  action ="{%url 'recognition'%}" enctype="multipart/form-data" >
-        {% csrf_token %}
+    <form method="POST"  action ="{%url 'enter_room_recognition'%}"   enctype="multipart/form-data" >
         <div class="field">
             <label for= "member_number" class="labelid">학번&nbsp / &nbsp 수험번호</label>
             <input name="member_number" id="member_number"  required >
@@ -76,25 +74,29 @@
 
         <a>여기에 얼굴인식 캠키기 (일단임시로 cam키는것만 넣음 원래는 123초후 캡쳐해야함)</a>
         <video autoplay playsinline></video>
-	    <script src="{% static 'js/video.js' %}"></script>
+        <br>
 
+        <link rel='stylesheet' type="text/css" media="all" href="{% static 'main.css' %}"/>
+        <script src="{% static 'js/capture.js' %}">	</script>
+        <div class="contentarea">
+          <div class="camera">
+            <video id="video">Video stream not available.</video>
+          </div>
+          <canvas id="canvas">
+          </canvas>
+        </div>
+          <!--<div class="output">-->
+        <a>원래는 캡처한 이미지로 가야함! 임시로 이미지 파일 받는것!!</a>
+        <div class="field">
+                        <img id="photo" alt="The screen capture will appear in this box.">
+            <!--<input type = "file" class="photo" id="photo" name="photo"  style="widows: 200px" accept=".png, .jpeg, .jpg">-->
+        </div>
 
         <div align="center">
-            <button type="submit" class ="enter_room_recognition" id="enter_room_recognition" ><p>방입장</p></button>
+            <button type="submit" class ="bt_enter_room_recognition" id="bt_enter_room_recognition" ><p>방입장</p></button>
             <br>
             <button type="button" class ="btn btn-light"  onclick="location.href='/home'" ><p >이전으로</p></button>
-            <script>
-                $('.enter_room').click(function(){
-                    if (!$('#room_name').val()){
-                        alert("방이름 입력하세요.");
-                        return false;
-                    }
-                    if (!$('#room_ps').val()){
-                        alert("방이름 입력하세요.");
-                        return false;
-                    }
-                });
-            </script>
+
         </div>
         <br>
         {% if messages %}
