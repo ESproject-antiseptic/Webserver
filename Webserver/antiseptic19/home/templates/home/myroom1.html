@@ -1,0 +1,49 @@
+{%extends 'main/top.html' %}
+{% block content %}
+<script>
+i=0
+</script>
+<h4>Room Detail<h4>
+<div class="row mt-5">
+  <div class="col-50">
+    <table class="table" style="font-size:15px; width: 100%; height:200px;text-align:center; border-top: 1px solid #444444; border-collapse: collapse;">
+
+      <thead class="thead-dark">
+        <tr style="border-bottom: 1px solid #444444; padding: 10px;">
+          <th scope="col">#</th>
+          <th scope="col">&nbsp&nbsp방 이름</th>
+          <th scope="col">&nbsp&nbsp방 비밀번호</th>
+          <th scope="col">&nbsp&nbsp회원 명단</th>
+          <th scope="col">&nbsp&nbsp방 기능</th>
+        </tr>
+      </thead>
+      
+      <tbody>
+        {% for room in rooms %}
+        <tr style="border-bottom: 1px solid #444444;;text-align:center;width: 100%; height:50px;">
+          <th scope="row">
+          <script>
+            function a(){
+              i++
+              document.write(i)
+            }
+            a()
+          </script>
+          </th>
+          <td>{{ room.room_name }}</td>
+          <td>{{ room.room_ps }}</td>
+          <td>{{ room.room_member }}</td>
+          <td>{{ room.room_func }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<br>
+<div class="row">
+  <div class="col-12">
+    <button class="btn btn-primary" style="display: block; margin-right:50px; margin-left:10px;width:30%;outline: none;background-color: #4277b2;border: 1px solid #4277b2;border-radius: 10px;color: white;font-size: 1rem;cursor: pointer;" onclick="location.href='/home/myroom'">이전</button>
+  </div>
+</div>
+{% endblock %}

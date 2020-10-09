@@ -1,0 +1,107 @@
+{%extends 'main/top.html' %}
+{% block content %}
+<style>
+    .login{
+        width: 450px;
+    }
+    .enter_room_field h4{
+        color: gray;
+        line-height: 5px;
+        font-size: 1.4rem;
+    }
+    .enter_room_field .field{
+        padding: 5px;
+        margin-top: 20px;
+        position: relative;
+    }
+    .enter_room_field input{
+        width: 70%;
+        border: none;
+        outline: none;
+        border-bottom: 1px solid #999;
+        color: black;
+        font-size: 1rem;
+    }
+
+    .enter_room_field button{
+        display: block;
+        width: 80%;
+        outline: none;
+        background-color: #4277b2;
+        border: 1px solid #4277b2;
+        border-radius: 10px;
+        color: white;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+    .enter_room_field .labelid{
+        color: gray;
+    }
+    .enter_room_field .label{
+        position: absolute;
+        pinter-events: none;
+        left:140px;
+        top: 5px;
+        transition: 0.2s ease all;
+        color: #A9CCE3;
+    }
+    .enter_room_field input:focus ~ .label,
+    .enter_room_field input:not(:focus):valid ~ .label{
+        top: -10px;
+        font-size: .8rem;
+        opacity: 1;
+    }
+
+
+</style>
+
+<div class="enter_room_field">
+    <h4><img src="/static/img/enter_door.png" width="97px" height="94px" alt="enter_icon" style="vertical-align:middle">&nbsp&nbsp&nbsp ENTER &nbsp ROOM</h4>
+    <form method="POST"  action ="{%url 'enter_room'%}" enctype="multipart/form-data" >
+        {% csrf_token %}
+        <div class="field">
+            <label for= "room_name" class="labelid">&nbsp&nbsp ROOM NAME &nbsp&nbsp&nbsp&nbsp</label>
+            <input name="room_name" id="room_name"  required >
+            <span class="label">abc@gmail.com</span>
+        </div>
+
+        <div class="field">
+            <label for= "room_ps" class="labelid">ROOM Password &nbsp </label>
+            <input name = "room_ps" type ="password" id="room_ps" required>
+            <span class="label">8자리이상</span>
+        </div>
+        <br>
+        <div align="center">
+            <button type="submit" class ="enter_room" id="enter_room" ><p>방입장</p></button>
+            <br>
+            <button type="button" class ="btn btn-light"  onclick="location.href='/home'" ><p >이전으로</p></button>
+            <script>
+                $('.enter_room').click(function(){
+                    if (!$('#room_name').val()){
+                        alert("방이름 입력하세요.");
+                        return false;
+                    }
+                    if (!$('#room_ps').val()){
+                        alert("방이름 입력하세요.");
+                        return false;
+                    }
+                });
+            </script>
+        </div>
+        <br>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="row" style="text-align:center">
+                <div class="col-sm-6" style="text-align:center">
+                    <div class="alert alert-danger" style="text-align:center">
+                    <strong>{{ message.tags }}!</strong> {{ message.message }}
+                    </div>
+                </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </form>
+
+</div>
+
+{% endblock %}

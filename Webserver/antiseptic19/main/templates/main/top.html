@@ -28,10 +28,11 @@
         .main{
             width:100%;
             background-color: #e9eaef;
-            box-shadow: 20px 0 20px #143477;
+            box-shadow: 20px 20px 20px 20px #143477;
         }
         .top{
             background-color:#3c5b9a;
+            height:50%;
         }
         .header{
             display: flex;
@@ -85,7 +86,7 @@
             width: 400px;
             margin: auto;
             background-color : white;
-            padding: 30px;
+            padding: 10px 30px;
             position: relative;
             top: -180px
         }
@@ -171,7 +172,7 @@
                                 <a>{{request.session.name}}님 안녕하세요</a>
                                 <a href="/home/mypage">MYPAGE</a>
                                 <a href="/logout">LOGOUT</a>
-                                <a href="#">MYROOM</a>
+                                <a href="/home/myroom">MYROOM</a>
                             </div>
 
                             <script>
@@ -210,6 +211,8 @@
             {% block content %}
             {% endblock %}
         </div>
+
     </div>
+
 </body>
 </html>

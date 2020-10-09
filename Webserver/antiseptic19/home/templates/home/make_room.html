@@ -1,0 +1,261 @@
+{%extends 'main/top.html' %}
+{% block content %}
+<style>
+    .login{
+        width: 60%;
+    }
+
+    .make_room_field h4{
+        color: black;
+        line-height: 5px;
+        font-size: 1.4rem;
+    }
+    .make_room_field .field{
+        padding: 5px;
+        margin-top: 20px;
+        position: relative;
+    }
+    .make_room_field input{
+        width: 60%;
+        border: none;
+        outline: none;
+        border-bottom: 1px solid #999;
+        color: black;
+        font-size: 1rem;
+    }
+    .make_room_field a{
+        width: 60%;
+        border: none;
+        outline: none;
+        color: black;
+        font-size: 1rem;
+    }
+    .make_room_field .field.button{
+        display: block;
+        margin-right:10px;
+        margin-left:10px;
+
+    }
+
+    .make_room_field button{
+        display: block;
+        margin-right:10px;
+        margin-left:10px;
+        width: 40%;
+        outline: none;
+        background-color: #4277b2;
+        border: 1px solid #4277b2;
+        border-radius: 10px;
+        color: white;
+        font-size: 1rem;
+        cursor: pointer;
+
+    }
+    .make_room_field .labelid{
+        color: gray;
+    }
+
+    #func_table ul li{
+        width:50%;
+        list-style:none;
+        margin:-70px 20px 0 100px;
+        padding:2px 0;
+        border-bottom:1px solid#999;
+    }
+    #func_table ul li::after{
+        content:'';
+        display:block;
+        clear:both;
+    }
+    #func_table div.funcInfo{
+        float:left;
+        font-size:13px;
+        line-height:2;
+    }
+    #func_table div.funcInfo span{
+        display:inline-block;
+        float:left;
+        width:200px;
+        color: gray;
+        font-weight:bold;
+        margin-right:10px;
+    }
+    .allCheck { font-size:11px; float:right; width:200px; }
+    .allCheck input { width:20px; height:20px; float:right;}
+    .allCheck label { margin-left:10px; float:right; color:gray;}
+    .checkBox { float:right; width:20px;line-height:2; }
+    .checkBox input { float:right; width:20px; height:20px;}
+
+</style>
+<div class="make_room_field">
+    <h4><img src="/static/img/door.png" width="40px" height="75px" alt="door_icon" style="vertical-align:middle" >&nbsp&nbsp&nbsp MAKE &nbsp ROOM</h4>
+    <form method="POST"  action ="{%url 'make_room'%}" enctype="multipart/form-data" style="border: 1px solid #4277b2; border-radius: 10px; padding-right:5px; margin:-5px;">
+        {% csrf_token %}
+        <div class="field" >
+            <label for= "admin" class="labelid"  style="float:left;" >&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Admin &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+            <!--<input class ="admin" name="admin" id="admin" >-->
+            <a class="admin" name="admin" id="admin"> {{request.session.user}}</a>
+        </div>
+        <br>
+
+        <div class="field" >
+            <label for= "room_name" class="labelid"  style="float:left;" >&nbsp&nbsp&nbsp&nbsp Room Name &nbsp&nbsp&nbsp&nbsp&nbsp</label>
+            <input class ="room_name" name="room_name" id="room_name" check_result = "fail"  style="float:left;" >
+        </div>
+        <button type="button" class ="room_check" id ="room_check" onclick ="room_check_func()" style=" float:right; margin-right:0px; width: 140px; background-color: gray; border: 1px solid gray;">room 중복 확인</button>
+        <br>
+        <script src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script type="text/javascript">
+            function room_check_func(){
+                room_overlap_input =document.querySelector('input[name = "room_name"]');
+                if ( room_overlap_input.value == '') {
+                    alert('방 이름을 입력해주세요.');
+                    return;
+                }
+                $.ajax({
+                    url: '{%url 'make_room'%}',
+                    data: { 'room_name' : room_overlap_input.value},
+                    success: function (data){
+                        console.log(data['overlap']);
+                        if (data['overlap'] =="fail"){
+                            alert("이미 존재하는 방 이름입니다.");
+                            id_overlap_input.focus();
+                            return;
+                        }else{
+                            alert("사용가능한 방 이름입니다.");
+                            $('.room_name').attr("check_result", "success");
+                            return;
+                        }
+                    }
+                })
+            }
+            </script>
+        <br>
+
+        <div class="field" >
+            <label for= "room_ps" class="labelid"  style="float:left;" > &nbsp&nbsp Room Password &nbsp&nbsp </label>
+            <input class ="room_ps" name="room_ps" id="room_ps" >
+        </div>
+        <br>
+
+        <div class="field" >
+            <!--<form id="frm_excel" name="frm_excel" enctype="multipart/form-data">-->
+                <label for= "room_member" class="labelid"  style="float:left;" > &nbsp&nbsp&nbsp&nbsp Room Member &nbsp&nbsp </label>
+                <input type="file" class ="room_member" name="room_member" id="room_member" check="fail">
+                <button type="button" class ="room_member_bt" name="room_member_bt" id="room_member_bt"  onclick="execl_upload();" style=" float:right; margin-right:0px; width: 140px; background-color: gray; border: 1px solid gray;">회원 명단 업로드</button>
+                <a type="btn" style= "text-decoration:none;" href="/static/a.xlsx" download><br>&nbsp&nbsp&nbsp회원 명단 양식&nbsp 다운로드</a>
+            <!--</form>-->
+        </div>
+
+        <br>
+        <script type="text/javascript">
+        function execl_upload(){
+            if(!$('#room_member').val()){
+                alert('엑셀 파일을 입력하세요');
+            }else{
+                var ext = $('#room_member').val().split('.').pop().toLowerCase();
+                if($.inArray(ext, ['xls','xlsx']) == -1) {
+	                alert('엑셀 파일만 업로드 할 수 있습니다.');
+                }else{
+                    alert('엑셀 파일을 업로드했습니다.');
+                    $('#room_member').attr("check", "success");
+                    $(".chBox1").prop("checked", true);
+                }
+            }
+        }
+        </script>
+
+        <div class="field" >
+            <label for= "func_table" class="labelid"  style="float:left;" > &nbsp&nbsp&nbsp&nbsp Room Function &nbsp&nbsp </label>
+            <section id ="func_table">
+                <ul>
+                    <li>
+                        <div class="allCheck">
+                            <input type="checkbox" name="allCheck" id ="allCheck" /><label for="allCheck">모두 선택</label>
+                        </div>
+                        <script type="text/javascript">
+                            $("#allCheck").click(function(){
+                             var chk = $("#allCheck").prop("checked");
+                             if(chk) {
+                              $(".chBox").prop("checked", true);
+                             } else {
+                              $(".chBox").prop("checked", false);
+                             }
+                            });
+                        </script>
+                    </li>
+                    <li>
+                        <div class ="funcInfo">
+                            <p>
+                                <span>명단 속 회원 얼굴인식</span>
+                            </p>
+                        </div>
+                        <div class="checkBox">
+                           <input type="checkbox" name="chBox1" class="chBox1" data-cartNum="func1" />
+                        </div>
+                    </li>
+                    <li>
+                        <div class ="funcInfo">
+                            <p>
+                                <span>특정 프로그램 차단</span>
+                            </p>
+                        </div>
+                        <div class="checkBox">
+                           <input type="checkbox" name="chBox" class="chBox" data-cartNum="func2"  value = int(2) />
+                        </div>
+                    </li>
+                    <li>
+                        <div class ="funcInfo">
+                            <p>
+                                <span>WEB 키보드 사용 금지</span>
+                            </p>
+                        </div>
+                        <div class="checkBox">
+                           <input type="checkbox" name="chBox" class="chBox" data-cartNum="func3" value=3 />
+                        </div>
+                    </li>
+                    <li>
+                        <div class ="funcInfo">
+                            <p>
+                                <span>APP 움직임 감지</span>
+                            </p>
+                        </div>
+                        <div class="checkBox">
+                           <input type="checkbox" name="chBox" class="chBox" data-cartNum="func4" value=4 />
+                        </div>
+                    </li>
+                    <li>
+                        <div class ="funcInfo">
+                            <p>
+                                <span>마스크 인식</span>
+                            </p>
+                        </div>
+                        <div class="checkBox">
+                           <input type="checkbox" name="chBox" class="chBox" data-cartNum="func5" value=5 />
+                        </div>
+                    </li>
+                </ul>
+            </section>
+            <!--<button type="button" class ="room_func" name="room_func" id="room_func" style=" float:right; margin-right:0px; width: 140px; background-color: gray; border: 1px solid gray;">기능 선택</button>-->
+        </div>
+        <div align ="center">
+        <button type="submit" class ="make_room"  id="make_room" style="float:right;"><p >방 만들기</p></button>
+        <button type="button" class ="btn btn-light"  onclick="location.href='/home'" style="float:left;"><p >이전으로</p></button>
+        <script>
+            $('.make_room').click(function(){
+                if ($('.room_name').attr("check_result") == "fail"){
+                    alert("방이름 중복체크를 확인하세요.");
+                    return false;
+                }
+            });
+        </script>
+    </div>
+    </form>
+    <br><br>
+    
+
+    <br><br><br>
+
+</div>
+
+{% endblock %}

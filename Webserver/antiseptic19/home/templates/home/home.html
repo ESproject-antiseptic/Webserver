@@ -1,0 +1,31 @@
+{%extends 'main/top.html' %}
+{% block content %}
+<style>
+    .login{
+        width: 80%;
+    }
+    .home_field button{
+        display: block;
+        width: 50%;
+        outline: none;
+        background-color: #4277b2;
+        border: 1px solid #4277b2;
+        border-radius: 10px;
+        color: white;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+
+</style>
+<div class="home_field">
+    <h4>HOME</h4>
+    <div align="center">
+        <button type="button" class ="btn btn-light"  onclick="location.href='/home/make_room'" style="float:left; margin-right:20px; margin-left:20px; width: 45%; height: 150px; "><p style="font-size:24px;"><img src="/static/img/white_door.png" width="50px" height="94px" alt="door_icon" style="vertical-align:middle" >&nbsp&nbsp Make Room</p></button>
+        <button type="button" class ="btn btn-light"  onclick="location.href='/home/enter_room2'" style=" margin-right:20px;  margin-left:20px; width: 45%;height: 150px;"><p style="font-size:24px;"><img src="/static/img/white_enter_door.png" width="97px" height="94px" alt="enter_icon" style="vertical-align:middle" >&nbsp&nbsp Enter Room</p></button>
+        <br>
+        <br>
+        <button type="button" class ="btn btn-light"  onclick="location.href='/'"><p >이전으로</p></button>
+    </div>
+</div>
+
+{% endblock %}
