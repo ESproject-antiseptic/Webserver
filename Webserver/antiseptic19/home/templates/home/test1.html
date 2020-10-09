@@ -1,0 +1,22 @@
+<!doctype html>
+{% load static %}
+<html>
+<head>
+	<title>WebRTC: Still photo capture demo</title>
+	<meta charset='utf-8'>
+    <link rel='stylesheet' type="text/css" media="all" href="{% static 'main.css' %}"/>
+    <script src="{% static "js/capture.js" %}">
+	</script>
+</head>
+<body>
+<div class="contentarea">
+  <div class="camera">
+    <video id="video">Video stream not available.</video>
+  </div>
+  <canvas id="canvas">
+  </canvas>
+  <div class="output">
+    <img id="photo" alt="The screen capture will appear in this box."> 
+  
+</body>
+</html>

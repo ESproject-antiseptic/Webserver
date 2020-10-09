@@ -26,6 +26,7 @@ SECRET_KEY = 'otcgq8$5u2jy!ss8b_z%czag7iodlt)97w$!vu%w3s6z+c=gk)'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+MEDIA_ROOT_URL = '.'
 
 
 # Application definition
@@ -39,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'simplejson',
     'main',
-    'home'
+    'home',
+ 
 
 
 ]
